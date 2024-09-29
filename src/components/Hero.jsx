@@ -35,7 +35,7 @@ const Hero = () => {
       <div className="absolute bottom-12 w-full flex justify-center mb-8">
   <div className="flex space-x-4">
     <Tilt options={{ scale: 1.05 }}>
-      <motion.a href='src\assets\Nishanth Ayyalasomayajula Resume.pdf' target='_blank' rel='noopener noreferrer' whileHover={{ scale: 1.1 }}>
+      <motion.a href='src\assets\Nishanth-Ayyalasomayajula-Resume.pdf' target='_blank' rel='noopener noreferrer' whileHover={{ scale: 1.1 }}>
         <button className='bg-tertiary text-white px-4 py-2 rounded hover:bg-primary-dark transition duration-300' style={styles.button}>
           View/Download Resume
         </button>
