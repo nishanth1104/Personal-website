@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { About, Contact, Experience, Hero, Navbar, Tech, Works, StarsCanvas } from "./components";
 import Education from "./components/Education";
-import CertificatesAndAwards from "./components/CertificatesAndAwards"; // Corrected path
+import CertificatesandAward from "./components/CertificatesandAward";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
         <Tech />
         <Education />
         <Works />
-        <CertificatesAndAwards /> {/* Corrected usage */}
+        <CertificatesandAward />
 
         <div className='relative z-0'>
           <Contact />
