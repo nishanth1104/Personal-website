@@ -2,7 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { About, Contact, Experience, Hero, Navbar, Tech, Works, StarsCanvas } from "./components";
 import Education from "./components/Education";
-import CertificatesAndAwards from "./components/CertificatesAndAwards"
+import CertificatesAndAwards from "./components/CertificatesAndAwards";
 const App = () => {
   return (
     <BrowserRouter>
