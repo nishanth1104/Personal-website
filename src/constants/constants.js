@@ -250,32 +250,7 @@ import {
       link: "https://www.linkedin.com/feed/update/urn:li:activity:7279911497479200768/",
       icon: web,
     },
-    {
-      title: "Best Design Award",
-      description: "Recognized for innovative and creative design solutions.",
-      link: "https://example.com",
-      icon: web,
-    },
-    {
-      title: "Tech Innovator Award",
-      description: "Honored for groundbreaking technological innovations.",
-      link: "https://example.com",
-      icon: carrent,
-    },
-    {
-      title: "Coding Challenge Champion",
-      description:
-        "Winner of the national coding challenge competition for developers.",
-      link: "https://example.com",
-      icon: web,
-    },
-    {
-      title: "Community Contribution Award",
-      description:
-        "Acknowledged for significant contributions to the developer community.",
-      link: "https://example.com",
-      icon: web,
-    },
+
   ];
 
   const educations = [
