@@ -1,8 +1,8 @@
 import { BrowserRouter } from "react-router-dom";
-
 import { About, Contact, Experience, Hero, Navbar, Tech, Works, StarsCanvas } from "./components";
 import Education from "./components/Education";
-import CertificatesAndAwards from "src\components\CertificatesAndAwards.jsx";
+import CertificatesAndAwards from "./components/CertificatesAndAwards"; // Corrected path
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -16,8 +16,7 @@ const App = () => {
         <Tech />
         <Education />
         <Works />
-        <CertificatesAndAwards />
-        
+        <CertificatesAndAwards /> {/* Corrected usage */}
 
         <div className='relative z-0'>
           <Contact />
@@ -26,6 +25,6 @@ const App = () => {
       </div>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
