@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import "react-vertical-timeline-component/style.min.css";
 
 import { styles } from "../style";
-import { educations } from "../constants/constants"; // Assuming you have a file containing education data
+import { educations } from "../constants/constants"; 
 import { SectionWrapper } from "../hoc";
 import { textVariant } from "../utils/motion";
 
