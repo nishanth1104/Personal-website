@@ -244,10 +244,10 @@ import {
 
   const certificatesAndAwards = [
     {
-      title: "Certificate of Excellence in Web Development",
+      title: "Salesforce AI Associate Certification",
       description:
-        "Awarded for outstanding performance in web development projects.",
-      link: "https://example.com",
+        "Achieved for demonstrating expertise in AI fundamentals, CRM integration, ethical AI practices, and data-driven solutions.",
+      link: "https://www.linkedin.com/feed/update/urn:li:activity:7279911497479200768/",
       icon: web,
     },
     {
