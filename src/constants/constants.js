@@ -28,6 +28,7 @@ import {
     Cloud1,
     CBIT,
     FSU,
+    AIASSoC,
   } from "../assets";
   
   export const navLinks = [
@@ -248,7 +249,7 @@ import {
       description:
         "Achieved for demonstrating expertise in AI fundamentals, CRM integration, ethical AI practices, and data-driven solutions.",
       link: "https://www.linkedin.com/feed/update/urn:li:activity:7279911497479200768/",
-      icon: web,
+      icon: AIASSoC,
     },
 
   ];

@@ -31,6 +31,7 @@ import CBIT from "./company/CBIT.png";
 import FSU from "./company/FSU.png";
 import KV from "./company/KV.jpg";
 import Cloud1 from "./company/Cloud.png";
+import AIASSoC from "./AIASSoC.jpg";
 
 
 import carrent from "./carrent.png";
@@ -72,4 +73,5 @@ export {
   FSU,
   CBIT,
   Cloud1,
+  AIASSoC,
 };
