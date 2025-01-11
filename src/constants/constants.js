@@ -241,7 +241,29 @@ import {
       image: tripguide,
       source_code_link: "https://github.com/nishanth1104/Travel-Companion",
     },
+    {
+      name: "ILLA",
+      description:
+        "Intelligent language learning assistant",
+      tags: [
+        {
+          name: "restapi",
+          color: "blue-text-gradient",
+        },
+        {
+          name: "react",
+          color: "green-text-gradient",
+        },
+        {
+          name: "css",
+          color: "pink-text-gradient",
+        },
+      ],
+      image: tripguide,
+      source_code_link: "https://github.com/nishanth1104/Travel-Companion",
+    },
   ];
+
 
   const certificatesAndAwards = [
     {
