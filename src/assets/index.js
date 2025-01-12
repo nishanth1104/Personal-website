@@ -37,6 +37,7 @@ import AIASSoC from "./AIASSoC.jpg";
 import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
+import illa from "./illa.png";
 
 export {
   logo,
@@ -74,4 +75,5 @@ export {
   CBIT,
   Cloud1,
   AIASSoC,
+  illa,
 };

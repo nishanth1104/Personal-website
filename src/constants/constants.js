@@ -29,6 +29,7 @@ import {
     CBIT,
     FSU,
     AIASSoC,
+    illa,
   } from "../assets";
   
   export const navLinks = [
@@ -247,20 +248,20 @@ import {
         "Intelligent language learning assistant",
       tags: [
         {
-          name: "restapi",
+          name: "NLP",
           color: "blue-text-gradient",
         },
         {
-          name: "react",
+          name: "transformers",
           color: "green-text-gradient",
         },
         {
-          name: "css",
+          name: "python",
           color: "pink-text-gradient",
         },
       ],
-      image: tripguide,
-      source_code_link: "https://github.com/nishanth1104/Travel-Companion",
+      image: illa,
+      source_code_link: "https://github.com/nishanth1104/Intelligent-language-learning-assistant",
     },
   ];
 
