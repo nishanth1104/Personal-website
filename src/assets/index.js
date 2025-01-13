@@ -38,6 +38,7 @@ import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 import illa from "./illa.png";
+import AIS from "./AIS.jpg";
 
 export {
   logo,
@@ -76,4 +77,5 @@ export {
   Cloud1,
   AIASSoC,
   illa,
+  AIS,
 };

@@ -30,6 +30,7 @@ import {
     FSU,
     AIASSoC,
     illa,
+    AIS,
   } from "../assets";
   
   export const navLinks = [
@@ -273,6 +274,13 @@ import {
         "Achieved for demonstrating expertise in AI fundamentals, CRM integration, ethical AI practices, and data-driven solutions.",
       link: "https://www.linkedin.com/feed/update/urn:li:activity:7279911497479200768/",
       icon: AIASSoC,
+    },
+    {
+        title: "Salesforce AI Specialist Certification",
+        description: "Earned for showcasing advanced skills in Salesforce AI, including the Einstein Trust Layer, Generative AI in CRM, Prompt Builder, Agentforce, and Model Builder.",
+        link: "https://www.linkedin.com/posts/nishanth-ayyalasomayajula_salesforceai-aispecialist-artificialintelligence-activity-7284666524378787840-_Rd0?utm_source=share&utm_medium=member_desktop",
+        icon: AIS,
+      
     },
 
   ];
