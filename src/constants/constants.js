@@ -268,7 +268,7 @@ import {
     {
       name: "Misinformation Detection in Healthcare",
       description:
-        "A comprehensive travel booking platform that allows users to book flights, hotels, and rental cars, and offers curated recommendations for popular destinations.",
+        " Developed an Agentic AI model that detects false or misleading health claims using NLP and machine learning.",
       tags: [
         {
           name: "NLP",
