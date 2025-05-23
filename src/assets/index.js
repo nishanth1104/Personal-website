@@ -39,6 +39,7 @@ import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 import illa from "./illa.png";
 import AIS from "./AIS.jpg";
+import MISD from "./MISD.png";
 
 export {
   logo,
