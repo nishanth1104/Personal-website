@@ -31,6 +31,7 @@ import {
     AIASSoC,
     illa,
     AIS,
+    MISD,
   } from "../assets";
   
   export const navLinks = [
@@ -50,7 +51,7 @@ import {
   
   const services = [
     {
-      title: "Python Developer",
+      title: "LLM Engineer",
       icon: web,
     },
     {
@@ -263,6 +264,27 @@ import {
       ],
       image: illa,
       source_code_link: "https://github.com/nishanth1104/Intelligent-language-learning-assistant",
+    },
+    {
+      name: "Misinformation Detection in Healthcare",
+      description:
+        "A comprehensive travel booking platform that allows users to book flights, hotels, and rental cars, and offers curated recommendations for popular destinations.",
+      tags: [
+        {
+          name: "NLP",
+          color: "blue-text-gradient",
+        },
+        {
+          name: "AI/ML",
+          color: "green-text-gradient",
+        },
+        {
+          name: "LLM/Agentic AI",
+          color: "pink-text-gradient",
+        },
+      ],
+      image: MISD,
+      source_code_link: "https://github.com/nishanth1104/Misinformation-in-Healthcare/tree/main",
     },
   ];
 
