@@ -40,6 +40,7 @@ import tripguide from "./tripguide.png";
 import illa from "./illa.png";
 import AIS from "./AIS.jpg";
 import MISD from "./MISD.png";
+import mcphf from "./mcphf.webp";
 
 export {
   logo,
@@ -80,4 +81,5 @@ export {
   illa,
   AIS,
   MISD,
+  mcphf,
 };

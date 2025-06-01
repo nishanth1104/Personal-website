@@ -32,6 +32,7 @@ import {
     illa,
     AIS,
     MISD,
+    mcphf,
   } from "../assets";
   
   export const navLinks = [
@@ -302,6 +303,13 @@ import {
         description: "Earned for showcasing advanced skills in Salesforce AI, including the Einstein Trust Layer, Generative AI in CRM, Prompt Builder, Agentforce, and Model Builder.",
         link: "https://www.linkedin.com/posts/nishanth-ayyalasomayajula_salesforceai-aispecialist-artificialintelligence-activity-7284666524378787840-_Rd0?utm_source=share&utm_medium=member_desktop",
         icon: AIS,
+      
+    },
+    {
+        title: "HuggingFace MCP Certification",
+        description: "Fundamentals of Model Contextg Protocol.",
+        link: "https://raw.githubusercontent.com/nishanth1104/Personal-website/refs/heads/master/mcphf.webp",
+        icon: mcphf,
       
     },
 
