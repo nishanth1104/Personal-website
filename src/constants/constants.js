@@ -120,9 +120,21 @@ import {
       iconBg: "#383E56",
       date: "January 2023 - November 2023",
       points: [
-        "Designed and developed intuitive front-end interfaces, collaborating with cross-functional teams to deliver cutting-edge solutions, resulting in a 30% improvement in user satisfaction metrics and a 20% increase in website traffic",
-        "Enhanced data extraction accuracy by implementing Python scripts with machine learning capabilities to tackle intricate business challenges, resulting in a 15% reduction in data errors and a 10% increase in data processing efficiency",
-        "Led a team in constructing an Entity Relationship Diagram (ERD) while assisting in the development of an inventory management system for an Australian client's website, leading to a streamlined process that increased inventory turnover by 25%",
+        "Trained and fine-tuned advanced Voice AI models for sentiment recognition using transformer architectures, increasing model accuracy by 37% over 4 months.",
+        "Led the end-to-end development of an inventory management system for Arlec (Australia), integrating SQL databases with ML-driven demand forecasting, which reduced manual effort and costs by 28%.",
+        "Deployed production-ready AI models using Docker and Kubernetes, significantly reducing API response latency by 25% and improving system scalability and reliability.",
+      ],
+    },
+    {
+      title: "Data Analytics Intern",
+      company_name: "Brane Enterprises Pvt.Ltd(Former NSLHUB)",
+      icon: brane,
+      iconBg: "#383E56",
+      date: "October 2022 - January 2023",
+      points: [
+        "Built end-to-end analytics dashboards using Power BI and Matplotlib to visualize operational KPIs and client metrics.",
+        "Designed ERD models and data workflows for internal business applications, streamlining backend development.",
+        "Assisted in prototyping machine learning models for predictive maintenance and early trend detection using Python.",
       ],
     },
     {
@@ -130,11 +142,11 @@ import {
       company_name: "XcitEducation Worldwide",
       icon: figma,
       iconBg: "#E6DEDD",
-      date: "Feburary 2022 - April 2022",
+      date: "Feburary 2021 - June 2022",
       points: [
-        "Crafted visually appealing and user-friendly interfaces for various digital platforms, collaborating with cross-functional teams to incorporate user feedback and iterate designs, resulting in a 20% increase in user engagement metrics ",
-        "Implemented innovative design strategies for website, app, and social media interfaces within a global education enterprise, leading to a 15% improvement in overall user satisfaction ratings ",
-        "Worked closely with the marketing team to analyze user behavior data and make data-driven design decisions that optimized conversion rates on digital platforms, resulting in a 10% increase in click-through rates",
+        "Designed responsive web UI prototypes and user flows tailored for 2,000+ underserved rural students, focusing on usability and accessibility to enhance digital learning outcomes.",
+        "Conducted extensive user research and low-bandwidth usability testing, iteratively refining designs to optimize performance and interaction for limited connectivity environments.",
+        "Collaborated closely with frontend developers to translate designs into high-quality React and TypeScript components, reducing UI bugs by 30% and accelerating the development lifecycle.",
       ],
     },
     {
@@ -142,7 +154,7 @@ import {
       company_name: "Google",
       icon: Cloud1,
       iconBg: "#383E56",
-      date: "April 2021 - June 2021",
+      date: "April 2020 - August 2020",
       points: [
         "Attained proficiency in Google Cloud Platform (GCP) services, focusing on cloud computing, data storage, and analytics.",
         "Underwent comprehensive GCP training, applied expertise in cloud and information security, and developed efficient data pipelines.",
@@ -323,7 +335,7 @@ import {
       iconBg: "#E6DEDD",
       date: "January 2024 - May 2025",
       points: [
-        "Website development and Administration",
+        "Machine Learning/Natural language Processing",
         "Information System Management",
         "Database management systems",
         
