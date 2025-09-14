@@ -33,6 +33,7 @@ import {
     AIS,
     MISD,
     mcphf,
+    starter,
   } from "../assets";
   
   export const navLinks = [
@@ -113,6 +114,18 @@ import {
   ];
   
   const experiences = [
+    {
+      title: "Full Stack AI Developer",
+      company_name: "Starteryou Inc",
+      icon: starter,
+      iconBg: "#383E56",
+      date: "July 2025 - Present",
+      points: [
+        "Built LLM pipelines for competitive intelligence in edtech and gig economy sectors, enhancing scalable inference strategies and data-driven decision-making processes",
+        "Applied deep learning techniques to labor and behavioral datasets, improving trend detection accuracy by 33% while integrating performance modeling insights",
+        "Led AI sentiment analysis on student forums to identify unmet product needs, facilitating collaboration across cross-functional teams",
+      ],
+    },
     {
       title: "Associate Process Leader Trainee",
       company_name: "Brane Enterprises Pvt.Ltd",

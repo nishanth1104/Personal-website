@@ -41,6 +41,7 @@ import illa from "./illa.png";
 import AIS from "./AIS.jpg";
 import MISD from "./MISD.png";
 import mcphf from "./mcphf.webp";
+import starter from "./starter.svg";
 
 export {
   logo,
@@ -82,4 +83,5 @@ export {
   AIS,
   MISD,
   mcphf,
+  starter,
 };
