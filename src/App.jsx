@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import { About, Contact, Experience, Hero, Navbar, Tech, Works, StarsCanvas } from "./components";
 import Education from "./components/Education";
 import CertificatesandAward from "./components/CertificatesandAward";
+import Blaze from "./components/Blaze";  
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
           <Navbar />
           <Hero />
         </div>
+
         <About />
         <Experience />
         <Tech />
@@ -22,6 +24,7 @@ const App = () => {
           <Contact />
           <StarsCanvas />
         </div>
+        <Blaze />
       </div>
     </BrowserRouter>
   );
