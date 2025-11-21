@@ -1,216 +1,296 @@
-import React, { useState, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useState, useEffect, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import Preloader from './components/Preloader';
 import CustomCursor from './components/CustomCursor';
-import Navigation from './components/Navigation';
-import ScrollProgress from './components/ScrollProgress';
-import SceneManager from './components/SceneManager';
 import { projects } from './constants';
 
-gsap.registerPlugin(ScrollTrigger);
+// Single 3D Scene that adapts to phases
+const AdaptiveScene = ({ currentPhase }) => {
+  const sphereRef = useRef();
+  const particlesRef = useRef();
+  const lightRef = useRef();
+
+  useFrame((state) => {
+    if (sphereRef.current) {
+      sphereRef.current.rotation.y += 0.003;
+      sphereRef.current.rotation.x += 0.001;
+      const scale = 1 + Math.sin(state.clock.elapsedTime) * 0.05;
+      sphereRef.current.scale.set(scale, scale, scale);
+    }
+
+    if (particlesRef.current) {
+      particlesRef.current.rotation.y += 0.0005;
+      const positions = particlesRef.current.geometry.attributes.position.array;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += Math.sin(state.clock.elapsedTime + i) * 0.001;
+      }
+      particlesRef.current.geometry.attributes.position.needsUpdate = true;
+    }
+
+    // Change light color based on phase
+    if (lightRef.current) {
+      if (currentPhase === 1) lightRef.current.color.setHex(0x00F5FF);
+      else if (currentPhase === 2) lightRef.current.color.setHex(0xA855F7);
+      else if (currentPhase === 3) lightRef.current.color.setHex(0xA855F7);
+      else if (currentPhase === 4) lightRef.current.color.setHex(0x10B981);
+      else if (currentPhase === 5) lightRef.current.color.setHex(0x00F5FF);
+    }
+  });
+
+  // Particle system
+  const particleCount = 1000;
+  const positions = new Float32Array(particleCount * 3);
+  const colors = new Float32Array(particleCount * 3);
+
+  for (let i = 0; i < particleCount * 3; i += 3) {
+    positions[i] = (Math.random() - 0.5) * 10;
+    positions[i + 1] = (Math.random() - 0.5) * 10;
+    positions[i + 2] = (Math.random() - 0.5) * 10;
+
+    const color = Math.random() > 0.5 ? new THREE.Color(0x00F5FF) : new THREE.Color(0xA855F7);
+    colors[i] = color.r;
+    colors[i + 1] = color.g;
+    colors[i + 2] = color.b;
+  }
+
+  return (
+    <>
+      <ambientLight intensity={0.3} />
+      <pointLight ref={lightRef} position={[0, 0, 0]} intensity={2} color={0x00F5FF} />
+
+      {/* Data Sphere */}
+      <mesh ref={sphereRef} visible={currentPhase === 1}>
+        <icosahedronGeometry args={[1.5, 2]} />
+        <meshStandardMaterial
+          color={0x00F5FF}
+          emissive={0x00F5FF}
+          emissiveIntensity={0.5}
+          transparent
+          opacity={0.7}
+          roughness={0.2}
+          metalness={0.8}
+        />
+      </mesh>
+
+      {/* Particles */}
+      <points ref={particlesRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={particleCount}
+            array={positions}
+            itemSize={3}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            count={particleCount}
+            array={colors}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial size={0.05} vertexColors transparent opacity={0.8} />
+      </points>
+    </>
+  );
+};
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState(1);
-
-  const handlePreloaderComplete = () => {
-    setIsLoading(false);
-  };
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     if (isLoading) return;
 
-    // Setup scroll triggers for phase transitions
-    const sections = document.querySelectorAll('.content-section');
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const progress = scrollY / maxScroll;
+      setScrollProgress(progress);
 
-    sections.forEach((section, index) => {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top center',
-        end: 'bottom center',
-        onEnter: () => setCurrentPhase(index + 1),
-        onEnterBack: () => setCurrentPhase(index + 1),
-      });
-    });
+      // Calculate phase (1-5)
+      const newPhase = Math.min(5, Math.floor(progress * 5) + 1);
+      setCurrentPhase(newPhase);
+
+      // Hide scroll indicator
+      const indicator = document.getElementById('scroll-indicator');
+      if (indicator) {
+        indicator.style.opacity = scrollY > 100 ? '0' : '1';
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    // Make page scrollable
+    document.body.style.height = '500vh';
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.height = 'auto';
     };
   }, [isLoading]);
 
-  const handlePhaseClick = (phaseNumber) => {
-    const section = document.getElementById(`phase${phaseNumber}`);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handlePhaseClick = (phase) => {
+    const scrollTarget = ((phase - 1) / 5) * (document.body.scrollHeight - window.innerHeight);
+    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
   };
 
   if (isLoading) {
-    return <Preloader onComplete={handlePreloaderComplete} />;
+    return <Preloader onComplete={() => setIsLoading(false)} />;
   }
 
   return (
     <>
       <CustomCursor />
-      <ScrollProgress />
-      <Navigation currentPhase={currentPhase} onPhaseClick={handlePhaseClick} />
 
-      {/* Single Fixed 3D Canvas */}
-      <SceneManager currentPhase={currentPhase} />
+      {/* Navigation */}
+      <nav className="nav">
+        <div className="logo">NA</div>
+        <div className="phase-indicators">
+          {[1, 2, 3, 4, 5].map(phase => (
+            <div
+              key={phase}
+              className={`phase-dot ${currentPhase === phase ? 'active' : ''}`}
+              onClick={() => handlePhaseClick(phase)}
+            />
+          ))}
+        </div>
+      </nav>
 
-      {/* Scrollable Content Container */}
-      <main className="content-container">
+      {/* Fixed 3D Canvas */}
+      <div className="canvas-container">
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 75 }}
+          style={{ background: '#0A0A0F' }}
+        >
+          <AdaptiveScene currentPhase={currentPhase} />
+          <OrbitControls enabled={false} />
+        </Canvas>
+      </div>
 
-        {/* PHASE 1: DATA NUCLEUS */}
-        <section id="phase1" className="content-section">
-          <div className="content-wrapper">
-            <div className="content-center">
-              <h1 className="title-hero">
-                NISHANTH
-                <br />
-                AYYALASOMAYAJULA
-              </h1>
-              <p className="subtitle-large">
-                AI ENGINEER | BUILDING INTELLIGENT SYSTEMS
-              </p>
-              <p className="body-text">
-                From raw data to autonomous intelligence — architecting the future of AI systems
-              </p>
+      {/* Phase 1: Data Nucleus */}
+      <div className={`phase-overlay ${currentPhase === 1 ? 'active' : ''}`}>
+        <div className="phase-title">DATA NUCLEUS</div>
+        <div className="phase-subtitle">"Where intelligence begins"</div>
+      </div>
+
+      {/* Phase 2: Model Awakening */}
+      <div className={`phase-overlay ${currentPhase === 2 ? 'active' : ''}`}>
+        <div className="phase-title">MODEL AWAKENING</div>
+        <div className="phase-subtitle">"The learning begins"</div>
+
+        <div className="project-cards">
+          {projects.slice(0, 3).map((project, idx) => (
+            <div key={idx} className="project-card">
+              <h3>🤖 {project.name}</h3>
+              <p>{project.description}</p>
+              <div className="tech-tags">
+                {project.tags?.map(tag => (
+                  <span key={tag.name} className="tech-tag">{tag.name}</span>
+                ))}
+              </div>
             </div>
+          ))}
+        </div>
+
+        <div className="metrics-hud">
+          <h3>TRAINING METRICS</h3>
+          <div className="metric-row">
+            <span>Models Trained:</span>
+            <span className="metric-value">50+</span>
           </div>
-        </section>
-
-        {/* PHASE 2: MODEL AWAKENING */}
-        <section id="phase2" className="content-section">
-          <div className="content-wrapper">
-            <div className="content-center">
-              <p className="subtitle-small">INTELLIGENCE EMERGES</p>
-              <h2 className="title-large">Model Awakening</h2>
-              <p className="body-text">
-                Neural networks learn patterns, make predictions, and power intelligent systems
-              </p>
-            </div>
-
-            {/* Metrics HUD */}
-            <div className="metrics-hud">
-              <div className="metric-card">
-                <div className="metric-label">Models Trained</div>
-                <div className="metric-value cyan">50+</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Avg Accuracy</div>
-                <div className="metric-value purple">94.2%</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Inference Time</div>
-                <div className="metric-value green">&lt;100ms</div>
-              </div>
-            </div>
-
-            {/* Projects Grid */}
-            <div className="projects-grid">
-              {projects.slice(0, 3).map((project, idx) => (
-                <div key={project.name} className="project-card">
-                  <h3>{project.name}</h3>
-                  <p>{project.description}</p>
-                  <div className="project-tags">
-                    {project.tags?.map(tag => (
-                      <span key={tag.name} className="tag">{tag.name}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="metric-row">
+            <span>Avg Accuracy:</span>
+            <span className="metric-value">94.2%</span>
           </div>
-        </section>
-
-        {/* PHASE 3: AGENT ARCHITECTURE */}
-        <section id="phase3" className="content-section">
-          <div className="content-wrapper">
-            <div className="content-center">
-              <p className="subtitle-small">ORCHESTRATED INTELLIGENCE</p>
-              <h2 className="title-large">Agent Architecture</h2>
-              <p className="body-text">
-                Specialized AI agents collaborate to solve complex problems through intelligent orchestration
-              </p>
-            </div>
-
-            {/* Agent Info Cards */}
-            <div className="agent-grid">
-              <div className="agent-card">
-                <div className="agent-icon cyan">R</div>
-                <h4>Router Agent</h4>
-                <p>Routes queries to specialized agents</p>
-              </div>
-              <div className="agent-card">
-                <div className="agent-icon purple">T</div>
-                <h4>Retrieval Agent</h4>
-                <p>Fetches relevant information from knowledge bases</p>
-              </div>
-              <div className="agent-card">
-                <div className="agent-icon green">S</div>
-                <h4>SQL Agent</h4>
-                <p>Executes database queries and operations</p>
-              </div>
-            </div>
+          <div className="metric-row">
+            <span>Inference Time:</span>
+            <span className="metric-value">&lt;100ms</span>
           </div>
-        </section>
+        </div>
+      </div>
 
-        {/* PHASE 4: ECOSYSTEM INTEGRATION */}
-        <section id="phase4" className="content-section">
-          <div className="content-wrapper">
-            <div className="content-center">
-              <p className="subtitle-small">CONNECTED SYSTEMS</p>
-              <h2 className="title-large">Ecosystem Integration</h2>
-              <p className="body-text">
-                Seamless integration across cloud services, databases, and infrastructure
-              </p>
-            </div>
+      {/* Phase 3: Agent Architecture */}
+      <div className={`phase-overlay ${currentPhase === 3 ? 'active' : ''}`}>
+        <div className="phase-title">AGENT ARCHITECTURE</div>
+        <div className="phase-subtitle">"The system takes form"</div>
 
-            {/* Metrics Dashboard */}
-            <div className="ecosystem-metrics">
-              <div className="metric-card">
-                <div className="metric-label">Uptime</div>
-                <div className="metric-value green">99.9%</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Latency</div>
-                <div className="metric-value cyan">45ms</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Throughput</div>
-                <div className="metric-value purple">10K/s</div>
-              </div>
-            </div>
+        <div className="skills-grid">
+          <div className="skill-item">
+            <div className="skill-icon">🔀</div>
+            <div className="skill-name">Router Agent</div>
           </div>
-        </section>
-
-        {/* PHASE 5: AUTONOMOUS MULTIVERSE */}
-        <section id="phase5" className="content-section">
-          <div className="content-wrapper">
-            <div className="content-center">
-              <p className="subtitle-small">THE FUTURE IS NOW</p>
-              <h2 className="title-large">Autonomous Multiverse</h2>
-              <p className="body-text">
-                AI systems deployed across industries, creating intelligent solutions at scale
-              </p>
-            </div>
-
-            {/* Contact Form */}
-            <div className="contact-form">
-              <h3>Let's Connect</h3>
-              <form className="form">
-                <input type="text" placeholder="Your Name" required />
-                <input type="email" placeholder="Your Email" required />
-                <textarea placeholder="Your Message" rows="4" required />
-                <button type="submit" className="btn-primary">Send Message</button>
-              </form>
-            </div>
+          <div className="skill-item">
+            <div className="skill-icon">🔍</div>
+            <div className="skill-name">Retrieval Agent</div>
           </div>
-        </section>
+          <div className="skill-item">
+            <div className="skill-icon">💾</div>
+            <div className="skill-name">SQL Executor</div>
+          </div>
+          <div className="skill-item">
+            <div className="skill-icon">📚</div>
+            <div className="skill-name">Research Agent</div>
+          </div>
+          <div className="skill-item">
+            <div className="skill-icon">💻</div>
+            <div className="skill-name">Code Generator</div>
+          </div>
+          <div className="skill-item">
+            <div className="skill-icon">💬</div>
+            <div className="skill-name">Synthesizer</div>
+          </div>
+        </div>
+      </div>
 
-      </main>
+      {/* Phase 4: Ecosystem Integration */}
+      <div className={`phase-overlay ${currentPhase === 4 ? 'active' : ''}`}>
+        <div className="phase-title">ECOSYSTEM INTEGRATION</div>
+        <div className="phase-subtitle">"The connected intelligence"</div>
+
+        <div className="metrics-hud">
+          <h3>SYSTEM PERFORMANCE</h3>
+          <div className="metric-row">
+            <span>Uptime:</span>
+            <span className="metric-value">99.9%</span>
+          </div>
+          <div className="metric-row">
+            <span>Latency:</span>
+            <span className="metric-value">45ms</span>
+          </div>
+          <div className="metric-row">
+            <span>Throughput:</span>
+            <span className="metric-value">10K/s</span>
+          </div>
+          <div className="metric-row">
+            <span>Error Rate:</span>
+            <span className="metric-value">0.02%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Phase 5: Autonomous Multiverse */}
+      <div className={`phase-overlay ${currentPhase === 5 ? 'active' : ''}`}>
+        <div className="phase-title">AUTONOMOUS MULTIVERSE</div>
+        <div className="phase-subtitle">"The deployed reality"</div>
+
+        <div className="contact-info">
+          <h1>Nishanth Ayyalasomayajula</h1>
+          <p>AI/GenAI Engineer | Building Intelligent Systems</p>
+          <div className="contact-buttons">
+            <a href="mailto:nayyalasomayaj@fsu.edu" className="contact-btn">📧 Email</a>
+            <a href="https://linkedin.com/in/nishanth-ayyalasomayajula" className="contact-btn" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
+            <a href="https://github.com/nishanth1104" className="contact-btn" target="_blank" rel="noopener noreferrer">💻 GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div id="scroll-indicator">
+        <span>SCROLL</span>
+        <div className="scroll-arrow"></div>
+      </div>
     </>
   );
 }
