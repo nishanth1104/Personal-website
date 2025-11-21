@@ -314,40 +314,38 @@ const Phase2ModelAwakening = ({ projects = [] }) => {
   return (
     <section id="phase2" className="phase-section">
       {/* 3D Canvas */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 12], fov: 75 }}>
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
+      <Canvas camera={{ position: [0, 0, 12], fov: 75 }}>
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
 
-          <NeuralBrain onNeuronClick={(neuron) => console.log('Neuron clicked:', neuron)} />
+        <NeuralBrain onNeuronClick={(neuron) => console.log('Neuron clicked:', neuron)} />
 
-          {/* Floating Project Cards */}
-          {projects.slice(0, 6).map((project, idx) => (
-            <ProjectCard3D
-              key={project.name}
-              position={projectPositions[idx]}
-              project={project}
-              onClick={() => setSelectedProject(project)}
-            />
-          ))}
-        </Canvas>
-      </div>
+        {/* Floating Project Cards */}
+        {projects.slice(0, 6).map((project, idx) => (
+          <ProjectCard3D
+            key={project.name}
+            position={projectPositions[idx]}
+            project={project}
+            onClick={() => setSelectedProject(project)}
+          />
+        ))}
+      </Canvas>
 
       {/* Metrics HUD */}
       <MetricsHUD />
 
       {/* Text Overlay */}
-      <div className="phase-content relative z-10 text-center">
+      <div className="phase-content text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="phase-subtitle">INTELLIGENCE EMERGES</p>
-          <h2 className="phase-title">Model Awakening</h2>
-          <p className="body-text mt-4 max-w-2xl mx-auto">
+          <p className="phase-subtitle" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>INTELLIGENCE EMERGES</p>
+          <h2 className="phase-title" style={{ textShadow: '0 0 40px rgba(0, 0, 0, 0.8)' }}>Model Awakening</h2>
+          <p className="body-text mt-4 max-w-2xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>
             Neural networks learn patterns, make predictions, and power intelligent systems
           </p>
         </motion.div>

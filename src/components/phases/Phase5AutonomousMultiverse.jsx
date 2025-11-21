@@ -177,37 +177,35 @@ const Phase5AutonomousMultiverse = () => {
   return (
     <section id="phase5" className="phase-section">
       {/* 3D Canvas */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
+      <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
+        <ambientLight intensity={0.4} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
 
-          {/* Industry Clusters */}
-          {industries.map((industry) => (
-            <IndustryCluster
-              key={industry.id}
-              position={industry.position}
-              industry={industry}
-            />
-          ))}
+        {/* Industry Clusters */}
+        {industries.map((industry) => (
+          <IndustryCluster
+            key={industry.id}
+            position={industry.position}
+            industry={industry}
+          />
+        ))}
 
-          {/* Cross-Ecosystem Network */}
-          <CrossEcosystemNetwork />
-        </Canvas>
-      </div>
+        {/* Cross-Ecosystem Network */}
+        <CrossEcosystemNetwork />
+      </Canvas>
 
       {/* Text Overlay */}
-      <div className="phase-content relative z-10 text-center pt-20">
+      <div className="phase-content text-center" style={{ marginTop: '-20vh' }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="phase-subtitle">THE FUTURE IS NOW</p>
-          <h2 className="phase-title">Autonomous Multiverse</h2>
-          <p className="body-text mt-4 max-w-2xl mx-auto">
+          <p className="phase-subtitle" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>THE FUTURE IS NOW</p>
+          <h2 className="phase-title" style={{ textShadow: '0 0 40px rgba(0, 0, 0, 0.8)' }}>Autonomous Multiverse</h2>
+          <p className="body-text mt-4 max-w-2xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>
             AI systems deployed across industries, creating intelligent solutions at scale
           </p>
         </motion.div>

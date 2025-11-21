@@ -136,45 +136,44 @@ const Phase1DataNucleus = () => {
   return (
     <section id="phase1" className="phase-section">
       {/* 3D Canvas */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 75 }}>
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
+      <Canvas camera={{ position: [0, 0, 8], fov: 75 }}>
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
 
-          <DataSphere />
-          <ParticleStreams />
+        <DataSphere />
+        <ParticleStreams />
 
-          <OrbitLabel position={[0, 3, 0]} text="TRAINING DATA" />
-          <OrbitLabel position={[3, 0, 0]} text="REAL-TIME STREAMS" />
-          <OrbitLabel position={[-3, 0, 0]} text="KNOWLEDGE GRAPHS" />
+        <OrbitLabel position={[0, 3, 0]} text="TRAINING DATA" />
+        <OrbitLabel position={[3, 0, 0]} text="REAL-TIME STREAMS" />
+        <OrbitLabel position={[-3, 0, 0]} text="KNOWLEDGE GRAPHS" />
 
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            rotateSpeed={0.5}
-            minPolarAngle={Math.PI / 3}
-            maxPolarAngle={Math.PI / 1.5}
-          />
-        </Canvas>
-      </div>
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          rotateSpeed={0.5}
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={Math.PI / 1.5}
+        />
+      </Canvas>
 
       {/* Text Overlay */}
-      <div className="phase-content relative z-10 text-center">
+      <div className="phase-content text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
-          <h1 className="hero-title">
+          <h1 className="hero-title" style={{ textShadow: '0 0 40px rgba(0, 0, 0, 0.8)' }}>
             NISHANTH
             <br />
             AYYALASOMAYAJULA
           </h1>
-          <p className="body-text mt-6 max-w-3xl mx-auto">
+          <p className="body-text mt-6 max-w-3xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)', fontSize: '20px', fontWeight: '600' }}>
             AI ENGINEER | BUILDING INTELLIGENT SYSTEMS
           </p>
-          <p className="body-text mt-4 max-w-2xl mx-auto text-sm">
+          <p className="body-text mt-4 max-w-2xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>
             From raw data to autonomous intelligence — architecting the future of AI systems
           </p>
         </motion.div>

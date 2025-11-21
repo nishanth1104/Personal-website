@@ -243,44 +243,42 @@ const Phase3AgentArchitecture = () => {
   return (
     <section id="phase3" className="phase-section">
       {/* 3D Canvas */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 2, 10], fov: 75 }}>
-          <ambientLight intensity={0.3} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
+      <Canvas camera={{ position: [0, 2, 10], fov: 75 }}>
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
 
-          {/* Central Orchestrator */}
-          <OrchestratorHub />
+        {/* Central Orchestrator */}
+        <OrchestratorHub />
 
-          {/* Agent Modules */}
-          {agentTypes.map((agent, idx) => (
-            <AgentModule
-              key={agent.id}
-              position={agentPositions[idx]}
-              agent={agent}
-              onClick={() => setSelectedAgent(agent)}
-            />
-          ))}
+        {/* Agent Modules */}
+        {agentTypes.map((agent, idx) => (
+          <AgentModule
+            key={agent.id}
+            position={agentPositions[idx]}
+            agent={agent}
+            onClick={() => setSelectedAgent(agent)}
+          />
+        ))}
 
-          {/* Communication Particles */}
-          <CommunicationParticles agentPositions={agentPositions} />
+        {/* Communication Particles */}
+        <CommunicationParticles agentPositions={agentPositions} />
 
-          {/* State Graph */}
-          <StateGraph />
-        </Canvas>
-      </div>
+        {/* State Graph */}
+        <StateGraph />
+      </Canvas>
 
       {/* Text Overlay */}
-      <div className="phase-content relative z-10 text-center">
+      <div className="phase-content text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="phase-subtitle">ORCHESTRATED INTELLIGENCE</p>
-          <h2 className="phase-title">Agent Architecture</h2>
-          <p className="body-text mt-4 max-w-2xl mx-auto">
+          <p className="phase-subtitle" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>ORCHESTRATED INTELLIGENCE</p>
+          <h2 className="phase-title" style={{ textShadow: '0 0 40px rgba(0, 0, 0, 0.8)' }}>Agent Architecture</h2>
+          <p className="body-text mt-4 max-w-2xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>
             Specialized AI agents collaborate to solve complex problems through intelligent orchestration
           </p>
         </motion.div>

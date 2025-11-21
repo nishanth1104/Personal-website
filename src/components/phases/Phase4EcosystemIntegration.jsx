@@ -135,40 +135,38 @@ const Phase4EcosystemIntegration = () => {
   return (
     <section id="phase4" className="phase-section">
       {/* 3D Canvas */}
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 2, 8], fov: 75 }}>
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={0.8} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
+      <Canvas camera={{ position: [0, 2, 8], fov: 75 }}>
+        <ambientLight intensity={0.4} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#A855F7" />
 
-          {/* Service Pods */}
-          {services.map((service, idx) => (
-            <ServicePod
-              key={service.id}
-              position={servicePositions[idx]}
-              service={service}
-            />
-          ))}
+        {/* Service Pods */}
+        {services.map((service, idx) => (
+          <ServicePod
+            key={service.id}
+            position={servicePositions[idx]}
+            service={service}
+          />
+        ))}
 
-          {/* Connection Network */}
-          <ConnectionNetwork servicePositions={servicePositions} />
-        </Canvas>
-      </div>
+        {/* Connection Network */}
+        <ConnectionNetwork servicePositions={servicePositions} />
+      </Canvas>
 
       {/* Metrics Dashboard */}
       <MetricsDashboard />
 
       {/* Text Overlay */}
-      <div className="phase-content relative z-10 text-center">
+      <div className="phase-content text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="phase-subtitle">CONNECTED SYSTEMS</p>
-          <h2 className="phase-title">Ecosystem Integration</h2>
-          <p className="body-text mt-4 max-w-2xl mx-auto">
+          <p className="phase-subtitle" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>CONNECTED SYSTEMS</p>
+          <h2 className="phase-title" style={{ textShadow: '0 0 40px rgba(0, 0, 0, 0.8)' }}>Ecosystem Integration</h2>
+          <p className="body-text mt-4 max-w-2xl mx-auto" style={{ textShadow: '0 0 20px rgba(0, 0, 0, 0.9)' }}>
             Seamless integration across cloud services, databases, and infrastructure
           </p>
         </motion.div>
