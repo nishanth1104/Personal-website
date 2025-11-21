@@ -1,63 +1,58 @@
-import React from 'react'
-import { Tilt } from 'react-tilt';
-import { motion } from 'framer-motion';
-import { styles } from '../style';
-import { services } from '../constants/constants';
-import { fadeIn, textVariant } from '../utils/motion';
-import { SectionWrapper } from '../hoc';
+import React from "react";
+import { motion } from "framer-motion";
+import { services } from "../constants";
 
 const ServiceCard = ({ index, title, icon }) => (
-  <Tilt className='xs:w-[250px] w-full'>
-    <motion.div
-      variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-      className='w-full p-[1px] rounded-[20px] shadow-card bg-gradient-to-b from-neon-blue to-neon-purple'
-    >
-      <div
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className='bg-black-200 rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col hover:shadow-[0_0_30px_rgba(188,19,254,0.3)] transition-shadow duration-300'
-      >
-        <img
-          src={icon}
-          alt='web-development'
-          className='w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]'
-        />
-
-        <h3 className='text-white text-[20px] font-bold text-center'>
-          {title}
-        </h3>
+  <motion.div
+    className="glass-card glow-effect"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.15 }}
+  >
+    <div className="flex flex-col items-center text-center">
+      <div className="w-24 h-24 flex items-center justify-center mb-6">
+        <img src={icon} alt={title} className="w-full h-full object-contain" />
       </div>
-    </motion.div>
-  </Tilt>
+      <h3 className="text-white text-xl font-semibold">{title}</h3>
+    </div>
+  </motion.div>
 );
 
 const About = () => {
   return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={`${styles.sectionSubText} text-neon-blue`}>Introduction</p>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
+    <section id="about" className="section-padding relative">
+      <div className="container-custom">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <p className="section-subtitle text-center">Introduction</p>
+          <h2 className="section-title text-center mt-4 mb-16">Overview</h2>
+        </motion.div>
 
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
-      >
-        I am an <span className="text-neon-purple font-bold">AI Engineer</span> and <span className="text-neon-blue font-bold">Systems Architect</span> specializing in Large Language Models (LLMs) and Agentic AI. 
-        Currently pursuing my M.S. in Information Technology at Florida State University, I build scalable, intelligent systems that solve real-world problems. 
-        My expertise spans from training transformer models to deploying production-ready AI pipelines.
-      </motion.p>
+        <motion.p
+          className="body-large text-center max-w-3xl mx-auto mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          I'm a skilled AI Engineer with experience in machine learning, neural networks, and agentic AI systems.
+          I specialize in building intelligent applications using frameworks like TensorFlow, PyTorch, and LangChain.
+          Let's work together to bring your ideas to life!
+        </motion.p>
 
-      <div className='mt-20 flex flex-wrap gap-10'>
-        {services.map((service, index) => (
-          <ServiceCard key={service.title} index={index} {...service} />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {services.map((service, index) => (
+            <ServiceCard key={service.title} index={index} {...service} />
+          ))}
+        </div>
       </div>
-    </>
-  )
-}
+    </section>
+  );
+};
 
-export default SectionWrapper(About, "about")
+export default About;
