@@ -42,6 +42,7 @@ import AIS from "./AIS.jpg";
 import MISD from "./MISD.png";
 import mcphf from "./mcphf.webp";
 import starter from "./starter.svg";
+import neurobud_demo from "./neurobud_demo.webp";
 
 export {
   logo,
@@ -84,4 +85,5 @@ export {
   MISD,
   mcphf,
   starter,
+  neurobud_demo,
 };

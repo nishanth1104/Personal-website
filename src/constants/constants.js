@@ -34,6 +34,7 @@ import {
   mcphf,
   starter,
   github,
+  neurobud_demo,
 } from "../assets";
 
 export const navLinks = [
@@ -207,8 +208,7 @@ const projects = [
         color: "pink-text-gradient",
       },
     ],
-    image: jobit, // Placeholder
-    video: "https://www.w3schools.com/html/mov_bbb.mp4", // Placeholder video
+    image: neurobud_demo,
     source_code_link: "https://github.com/nishanth1104/Neurobud",
   },
   {

@@ -21,7 +21,7 @@ const Hero = () => {
 
         <div>
           <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I'm <span className='text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-blue animate-text'>Nishanth</span>
+            Hi, I'm <span className='text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-blue animate-text neon-glow'>Nishanth</span>
           </h1>
           <div className={`${styles.heroSubText} mt-2 text-white-100 font-mono`}>
             <span className="text-neon-blue">{'>'}</span> 
@@ -50,12 +50,12 @@ const Hero = () => {
         className="absolute bottom-32 w-full flex justify-center gap-6 z-20"
       >
         <a href='https://github.com/nishanth1104/Personal-website/blob/master/src/assets/Nishanth_Ayyalasomayajula_Resume.pdf' target='_blank' rel='noopener noreferrer'>
-          <button className='bg-black-200 border border-neon-purple text-white px-6 py-3 rounded-xl hover:bg-neon-purple/20 hover:shadow-[0_0_20px_rgba(188,19,254,0.5)] transition-all duration-300 font-bold tracking-wider'>
+          <button className='glass-panel text-white px-8 py-4 rounded-xl hover:bg-neon-purple/20 hover:shadow-[0_0_30px_rgba(188,19,254,0.6)] transition-all duration-300 font-bold tracking-wider border border-neon-purple/50 neon-glow'>
             RESUME
           </button>
         </a>
         <a href='https://www.linkedin.com/in/nishanth-ayyalasomayajula' target='_blank' rel='noopener noreferrer'>
-          <button className='bg-black-200 border border-neon-blue text-white px-6 py-3 rounded-xl hover:bg-neon-blue/20 hover:shadow-[0_0_20px_rgba(0,243,255,0.5)] transition-all duration-300 font-bold tracking-wider'>
+          <button className='glass-panel text-white px-8 py-4 rounded-xl hover:bg-neon-blue/20 hover:shadow-[0_0_30px_rgba(0,243,255,0.6)] transition-all duration-300 font-bold tracking-wider border border-neon-blue/50 neon-glow'>
             LINKEDIN
           </button>
         </a>
