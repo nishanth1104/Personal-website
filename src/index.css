@@ -112,21 +112,31 @@ body {
 }
 
 .preloader-counter {
-  font-size: clamp(60px, 15vw, 120px);
-  font-weight: 800;
-  background: linear-gradient(135deg, #00F5FF, #A855F7);
+  font-size: clamp(80px, 18vw, 140px);
+  font-weight: 900;
+  background: linear-gradient(135deg, #00F5FF, #A855F7, #10B981);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .preloader-text {
-  font-size: 24px;
+  font-size: 20px;
   color: #00F5FF;
-  margin-top: 20px;
-  letter-spacing: 3px;
+  margin-top: 30px;
+  letter-spacing: 4px;
   text-transform: uppercase;
+  font-weight: 300;
+  opacity: 0.9;
 }
 
 /* Canvas Container */
@@ -149,11 +159,23 @@ body {
   pointer-events: none;
   z-index: 10;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .phase-overlay.active {
   opacity: 1;
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .phase-overlay * {
@@ -164,20 +186,33 @@ body {
   position: absolute;
   top: 120px;
   left: 50px;
-  font-size: clamp(32px, 6vw, 48px);
-  font-weight: bold;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
   color: #00F5FF;
-  text-shadow: 0 0 30px #00F5FF;
-  letter-spacing: 2px;
+  text-shadow: 0 0 40px rgba(0, 245, 255, 0.8), 0 0 80px rgba(0, 245, 255, 0.4);
+  letter-spacing: 3px;
+  line-height: 1.1;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 40px rgba(0, 245, 255, 0.8), 0 0 80px rgba(0, 245, 255, 0.4);
+  }
+  to {
+    text-shadow: 0 0 50px rgba(0, 245, 255, 1), 0 0 100px rgba(0, 245, 255, 0.6), 0 0 150px rgba(0, 245, 255, 0.3);
+  }
 }
 
 .phase-subtitle {
   position: absolute;
-  top: clamp(170px, 25vh, 180px);
+  top: clamp(185px, 28vh, 200px);
   left: 50px;
-  font-size: clamp(16px, 2vw, 20px);
-  color: #888;
+  font-size: clamp(18px, 2.2vw, 24px);
+  color: #AAA;
   font-style: italic;
+  font-weight: 300;
+  opacity: 0.9;
 }
 
 /* Project Cards */
@@ -192,20 +227,22 @@ body {
 }
 
 .project-card {
-  background: rgba(0, 245, 255, 0.1);
-  border: 1px solid #00F5FF;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  padding: 24px;
+  border-radius: 12px;
+  width: 320px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px) saturate(180%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .project-card:hover {
-  background: rgba(0, 245, 255, 0.2);
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+  background: rgba(0, 245, 255, 0.15);
+  border-color: rgba(0, 245, 255, 0.6);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(0, 245, 255, 0.4), 0 0 60px rgba(0, 245, 255, 0.2);
 }
 
 .project-card h3 {
@@ -246,19 +283,21 @@ body {
 }
 
 .skill-item {
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid #A855F7;
-  padding: 15px;
-  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  padding: 20px;
+  border-radius: 10px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  backdrop-filter: blur(10px);
 }
 
 .skill-item:hover {
-  background: rgba(168, 85, 247, 0.2);
-  transform: translateY(-5px);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.6);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4), 0 0 50px rgba(168, 85, 247, 0.2);
 }
 
 .skill-icon {
@@ -302,22 +341,25 @@ body {
 }
 
 .contact-btn {
-  padding: 15px 30px;
-  border: 2px solid #00F5FF;
+  padding: 16px 36px;
+  border: 2px solid rgba(0, 245, 255, 0.5);
   background: rgba(0, 245, 255, 0.1);
   color: #00F5FF;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.5px;
 }
 
 .contact-btn:hover {
-  background: rgba(0, 245, 255, 0.3);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 245, 255, 0.3);
+  background: rgba(0, 245, 255, 0.25);
+  border-color: #00F5FF;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 245, 255, 0.4), 0 0 60px rgba(0, 245, 255, 0.2);
 }
 
 /* Metrics HUD */
@@ -325,12 +367,13 @@ body {
   position: absolute;
   bottom: 50px;
   right: 50px;
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid #00F5FF;
-  padding: 20px;
-  border-radius: 10px;
-  min-width: 300px;
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 245, 255, 0.4);
+  padding: 24px;
+  border-radius: 12px;
+  min-width: 320px;
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .metrics-hud h3 {

@@ -11,22 +11,71 @@ const AdaptiveScene = ({ currentPhase }) => {
   const sphereRef = useRef();
   const particlesRef = useRef();
   const lightRef = useRef();
+  const neuralNetRef = useRef();
+  const agentHubRef = useRef();
+  const ecosystemRef = useRef();
 
   useFrame((state) => {
-    if (sphereRef.current) {
+    const time = state.clock.elapsedTime;
+
+    // Phase 1: Data Sphere
+    if (sphereRef.current && currentPhase === 1) {
       sphereRef.current.rotation.y += 0.003;
       sphereRef.current.rotation.x += 0.001;
-      const scale = 1 + Math.sin(state.clock.elapsedTime) * 0.05;
+      const scale = 1 + Math.sin(time) * 0.05;
       sphereRef.current.scale.set(scale, scale, scale);
     }
 
+    // Particles (flow towards center in Phase 1)
     if (particlesRef.current) {
       particlesRef.current.rotation.y += 0.0005;
       const positions = particlesRef.current.geometry.attributes.position.array;
-      for (let i = 0; i < positions.length; i += 3) {
-        positions[i + 1] += Math.sin(state.clock.elapsedTime + i) * 0.001;
+
+      if (currentPhase === 1) {
+        // Particles flow inward
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i] *= 0.998;
+          positions[i + 1] *= 0.998;
+          positions[i + 2] *= 0.998;
+
+          const dist = Math.sqrt(positions[i]**2 + positions[i+1]**2 + positions[i+2]**2);
+          if (dist < 2) {
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 8 + Math.random() * 2;
+            positions[i] = Math.cos(angle) * radius;
+            positions[i + 1] = (Math.random() - 0.5) * 8;
+            positions[i + 2] = Math.sin(angle) * radius;
+          }
+        }
+        particlesRef.current.geometry.attributes.position.needsUpdate = true;
       }
-      particlesRef.current.geometry.attributes.position.needsUpdate = true;
+    }
+
+    // Phase 2: Neural Network
+    if (neuralNetRef.current && currentPhase === 2) {
+      neuralNetRef.current.rotation.y = time * 0.15;
+      neuralNetRef.current.children.forEach((child, idx) => {
+        child.position.y += Math.sin(time * 2 + idx) * 0.001;
+      });
+    }
+
+    // Phase 3: Agent Hub
+    if (agentHubRef.current && currentPhase === 3) {
+      agentHubRef.current.rotation.y += 0.005;
+      const scale = 1.2 + Math.sin(time * 0.8) * 0.1;
+      agentHubRef.current.scale.set(scale, scale, scale);
+    }
+
+    // Phase 4: Ecosystem
+    if (ecosystemRef.current && currentPhase === 4) {
+      ecosystemRef.current.rotation.y += 0.003;
+      ecosystemRef.current.children.forEach((child, idx) => {
+        if (child.isMesh) {
+          child.rotation.y += 0.01;
+          const yOffset = Math.sin(time + idx * 0.5) * 0.02;
+          child.position.y = yOffset;
+        }
+      });
     }
 
     // Change light color based on phase
@@ -40,14 +89,16 @@ const AdaptiveScene = ({ currentPhase }) => {
   });
 
   // Particle system
-  const particleCount = 1000;
+  const particleCount = 1500;
   const positions = new Float32Array(particleCount * 3);
   const colors = new Float32Array(particleCount * 3);
 
   for (let i = 0; i < particleCount * 3; i += 3) {
-    positions[i] = (Math.random() - 0.5) * 10;
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 6 + Math.random() * 3;
+    positions[i] = Math.cos(angle) * radius;
     positions[i + 1] = (Math.random() - 0.5) * 10;
-    positions[i + 2] = (Math.random() - 0.5) * 10;
+    positions[i + 2] = Math.sin(angle) * radius;
 
     const color = Math.random() > 0.5 ? new THREE.Color(0x00F5FF) : new THREE.Color(0xA855F7);
     colors[i] = color.r;
@@ -55,27 +106,68 @@ const AdaptiveScene = ({ currentPhase }) => {
     colors[i + 2] = color.b;
   }
 
+  // Neural network nodes (Phase 2)
+  const neurons = [];
+  const layers = 4;
+  const nodesPerLayer = 6;
+  for (let layer = 0; layer < layers; layer++) {
+    for (let i = 0; i < nodesPerLayer; i++) {
+      const angle = (i / nodesPerLayer) * Math.PI * 2;
+      const radius = 2;
+      neurons.push({
+        position: [
+          Math.cos(angle) * radius,
+          (layer - layers / 2) * 1.2,
+          Math.sin(angle) * radius
+        ]
+      });
+    }
+  }
+
+  // Agent modules (Phase 3)
+  const agents = [
+    { angle: 0, color: '#00F5FF' },
+    { angle: Math.PI / 3, color: '#A855F7' },
+    { angle: (Math.PI / 3) * 2, color: '#10B981' },
+    { angle: Math.PI, color: '#F59E0B' },
+    { angle: (Math.PI / 3) * 4, color: '#EF4444' },
+    { angle: (Math.PI / 3) * 5, color: '#8B5CF6' }
+  ];
+
+  // Ecosystem services (Phase 4)
+  const services = [
+    { angle: 0, color: '#FF9900' },
+    { angle: Math.PI / 3, color: '#336791' },
+    { angle: (Math.PI / 3) * 2, color: '#DC382D' },
+    { angle: Math.PI, color: '#2496ED' },
+    { angle: (Math.PI / 3) * 4, color: '#326CE5' },
+    { angle: (Math.PI / 3) * 5, color: '#47A248' }
+  ];
+
   return (
     <>
-      <ambientLight intensity={0.3} />
-      <pointLight ref={lightRef} position={[0, 0, 0]} intensity={2} color={0x00F5FF} />
+      <ambientLight intensity={0.4} />
+      <pointLight ref={lightRef} position={[0, 0, 0]} intensity={2.5} color={0x00F5FF} />
+      <pointLight position={[5, 5, 5]} intensity={1} color={0xA855F7} />
+      <pointLight position={[-5, -5, -5]} intensity={0.8} color={0x10B981} />
 
-      {/* Data Sphere */}
+      {/* Phase 1: Data Sphere with flowing particles */}
       <mesh ref={sphereRef} visible={currentPhase === 1}>
-        <icosahedronGeometry args={[1.5, 2]} />
+        <icosahedronGeometry args={[1.8, 3]} />
         <meshStandardMaterial
           color={0x00F5FF}
           emissive={0x00F5FF}
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.6}
           transparent
-          opacity={0.7}
-          roughness={0.2}
-          metalness={0.8}
+          opacity={0.8}
+          roughness={0.1}
+          metalness={0.9}
+          wireframe={false}
         />
       </mesh>
 
-      {/* Particles */}
-      <points ref={particlesRef}>
+      {/* Particles (visible in phases 1 and 5) */}
+      <points ref={particlesRef} visible={currentPhase === 1 || currentPhase === 5}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
@@ -90,8 +182,106 @@ const AdaptiveScene = ({ currentPhase }) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <pointsMaterial size={0.05} vertexColors transparent opacity={0.8} />
+        <pointsMaterial size={0.06} vertexColors transparent opacity={0.9} />
       </points>
+
+      {/* Phase 2: Neural Network */}
+      <group ref={neuralNetRef} visible={currentPhase === 2}>
+        {neurons.map((neuron, idx) => (
+          <mesh key={idx} position={neuron.position}>
+            <sphereGeometry args={[0.08, 16, 16]} />
+            <meshStandardMaterial
+              color={idx % 2 === 0 ? 0x00F5FF : 0xA855F7}
+              emissive={idx % 2 === 0 ? 0x00F5FF : 0xA855F7}
+              emissiveIntensity={0.5}
+            />
+          </mesh>
+        ))}
+        {/* Connection lines */}
+        {neurons.map((neuron, idx) => {
+          if (idx < neurons.length - nodesPerLayer) {
+            const start = new THREE.Vector3(...neuron.position);
+            const end = new THREE.Vector3(...neurons[idx + nodesPerLayer].position);
+            const points = [start, end];
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            return (
+              <line key={`line-${idx}`} geometry={geometry}>
+                <lineBasicMaterial color={0x00F5FF} opacity={0.3} transparent />
+              </line>
+            );
+          }
+          return null;
+        })}
+      </group>
+
+      {/* Phase 3: Agent Hub */}
+      <group visible={currentPhase === 3}>
+        {/* Central Hub */}
+        <mesh ref={agentHubRef}>
+          <octahedronGeometry args={[0.8, 0]} />
+          <meshStandardMaterial
+            color={0x00F5FF}
+            emissive={0x00F5FF}
+            emissiveIntensity={0.8}
+            wireframe
+          />
+        </mesh>
+        {/* Agent Modules */}
+        {agents.map((agent, idx) => {
+          const radius = 3;
+          const x = Math.cos(agent.angle) * radius;
+          const z = Math.sin(agent.angle) * radius;
+          return (
+            <mesh key={idx} position={[x, 0, z]}>
+              <boxGeometry args={[0.5, 0.5, 0.5]} />
+              <meshStandardMaterial
+                color={agent.color}
+                emissive={agent.color}
+                emissiveIntensity={0.5}
+              />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* Phase 4: Ecosystem */}
+      <group ref={ecosystemRef} visible={currentPhase === 4}>
+        {services.map((service, idx) => {
+          const radius = 3.5;
+          const x = Math.cos(service.angle) * radius;
+          const z = Math.sin(service.angle) * radius;
+          return (
+            <mesh key={idx} position={[x, 0, z]}>
+              <cylinderGeometry args={[0.4, 0.4, 0.8, 6]} />
+              <meshStandardMaterial
+                color={service.color}
+                emissive={service.color}
+                emissiveIntensity={0.4}
+              />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* Phase 5: Multiverse (spheres) */}
+      <group visible={currentPhase === 5}>
+        {[
+          { pos: [-3, 1.5, 0], color: 0x10B981 },
+          { pos: [0, 1.5, -3], color: 0x00F5FF },
+          { pos: [3, 1.5, 0], color: 0xA855F7 },
+          { pos: [0, 1.5, 3], color: 0xF59E0B }
+        ].map((sphere, idx) => (
+          <mesh key={idx} position={sphere.pos}>
+            <sphereGeometry args={[0.7, 32, 32]} />
+            <meshStandardMaterial
+              color={sphere.color}
+              emissive={sphere.color}
+              emissiveIntensity={0.5}
+              wireframe
+            />
+          </mesh>
+        ))}
+      </group>
     </>
   );
 };
