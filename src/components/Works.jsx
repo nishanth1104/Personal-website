@@ -13,6 +13,7 @@ const ProjectCard = ({
   tags,
   image,
   source_code_link,
+  video,
 }) => {
   return (
     <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
@@ -22,19 +23,30 @@ const ProjectCard = ({
           scale: 1,
           speed: 450,
         }}
-        className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
+        className='bg-black-200 p-5 rounded-2xl sm:w-[360px] w-full border border-neon-purple/30 hover:shadow-[0_0_20px_rgba(188,19,254,0.3)] transition-shadow duration-300'
       >
         <div className='relative w-full h-[230px]'>
-          <img
-            src={image}
-            alt='project_image'
-            className='w-full h-full object-cover rounded-2xl'
-          />
+          {video ? (
+            <video
+              src={video}
+              className='w-full h-full object-cover rounded-2xl'
+              controls
+              muted
+              loop
+              poster={image}
+            />
+          ) : (
+            <img
+              src={image}
+              alt='project_image'
+              className='w-full h-full object-cover rounded-2xl'
+            />
+          )}
 
           <div className='absolute inset-0 flex justify-end m-3 card-img_hover'>
             <div
               onClick={() => window.open(source_code_link, "_blank")}
-              className='black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
+              className='black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer border border-neon-blue'
             >
               <img
                 src={github}
@@ -95,4 +107,4 @@ const Works = () => {
   )
 }
 
-export default SectionWrapper(Works, "");
+export default SectionWrapper(Works, "projects");

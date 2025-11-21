@@ -70,9 +70,9 @@ const Contact = () => {
     >
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className='flex-[0.75] bg-black-100 p-8 rounded-2xl'
+        className='flex-[0.75] bg-black-100 p-8 rounded-2xl border border-neon-blue/30 shadow-[0_0_20px_rgba(0,243,255,0.1)]'
       >
-        <p className={styles.sectionSubText}>Get in touch</p>
+        <p className={`${styles.sectionSubText} text-neon-purple`}>Get in touch</p>
         <h3 className={styles.sectionHeadText}>Contact.</h3>
 
         <form
@@ -88,7 +88,7 @@ const Contact = () => {
               value={form.name}
               onChange={handleChange}
               placeholder="What's your good name?"
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border border-neon-blue/20 focus:border-neon-blue font-medium transition-colors duration-300'
             />
           </label>
           <label className='flex flex-col'>
@@ -99,7 +99,7 @@ const Contact = () => {
               value={form.email}
               onChange={handleChange}
               placeholder="What's your web address?"
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border border-neon-blue/20 focus:border-neon-blue font-medium transition-colors duration-300'
             />
           </label>
           <label className='flex flex-col'>
@@ -110,13 +110,13 @@ const Contact = () => {
               value={form.message}
               onChange={handleChange}
               placeholder='What you want to say?'
-              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
+              className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border border-neon-blue/20 focus:border-neon-blue font-medium transition-colors duration-300'
             />
           </label>
 
           <button
             type='submit'
-            className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'
+            className='bg-tertiary py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary hover:bg-neon-blue/20 hover:text-neon-blue transition-all duration-300 border border-transparent hover:border-neon-blue'
           >
             {loading ? "Sending..." : "Send"}
           </button>

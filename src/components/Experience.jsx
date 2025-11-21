@@ -16,12 +16,14 @@ const ExperienceCard = ({ experience }) => {
   return (
     <VerticalTimelineElement
       contentStyle={{
-        background: "#1d1836",
+        background: "rgba(16, 13, 37, 0.8)", // black-100 with opacity
         color: "#fff",
+        borderBottom: "4px solid #bc13fe", // neon purple
+        boxShadow: "0 0 20px rgba(0,0,0,0.5)"
       }}
-      contentArrowStyle={{ borderRight: "7px solid  #232631" }}
+      contentArrowStyle={{ borderRight: "7px solid  #bc13fe" }}
       date={experience.date}
-      iconStyle={{ background: experience.iconBg }}
+      iconStyle={{ background: experience.iconBg, boxShadow: "0 0 10px #00f3ff" }}
       icon={
         <div className='flex justify-center items-center w-full h-full'>
           <img
@@ -46,7 +48,7 @@ const ExperienceCard = ({ experience }) => {
         {experience.points.map((point, index) => (
           <li
             key={`experience-point-${index}`}
-            className='text-white-100 text-[14px] pl-1 tracking-wider'
+            className='text-white-100 text-[14px] pl-1 tracking-wider hover:text-neon-blue transition-colors duration-300'
           >
             {point}
           </li>
@@ -60,7 +62,7 @@ const Experience = () => {
   return (
     <>
       <motion.div variants={textVariant()}>
-        <p className={`${styles.sectionSubText} text-center`}>
+        <p className={`${styles.sectionSubText} text-center text-neon-blue`}>
           What I have done so far
         </p>
         <h2 className={`${styles.sectionHeadText} text-center`}>
