@@ -1,465 +1,707 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float, Sphere, Box, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
-import { projects, technologies, educations } from './constants';
+import Lenis from '@studio-freight/lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { projects, technologies, educations, experiences } from './constants';
 
-// Preloader Component
-const Preloader = ({ onComplete }) => {
-  const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState('Initializing neural pathways...');
+gsap.registerPlugin(ScrollTrigger);
 
-  const statuses = [
-    'Initializing neural pathways...',
-    'Loading vector embeddings...',
-    'Establishing synaptic connections...',
-    'Calibrating agent networks...',
-    'Optimizing neural weights...',
-    'System ready...'
-  ];
+// ========================================
+// MINECRAFT WATERFALL - Falling Blue Blocks
+// ========================================
+function Waterfall() {
+  const [blocks, setBlocks] = useState([]);
 
   useEffect(() => {
-    let currentProgress = 0;
-    let statusIndex = 0;
-
-    const interval = setInterval(() => {
-      currentProgress += Math.random() * 15;
-      setProgress(Math.min(100, currentProgress));
-
-      if (statusIndex < statuses.length) {
-        setStatus(statuses[statusIndex]);
-        statusIndex++;
-      }
-
-      if (currentProgress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => onComplete(), 500);
-      }
-    }, 300);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="preloader">
-      <div className="neural-loader">
-        {[0, 1, 2, 3, 4].map(i => (
-          <div key={i} className="neural-node" style={{ animationDelay: `${i * 0.2}s` }}></div>
-        ))}
-      </div>
-      <div className="loading-text">INITIALIZING NEURAL NETWORK</div>
-      <div className="loading-status">{status}</div>
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-      </div>
-      <div className="system-stats">
-        <div className="stat-item">
-          <div className="stat-label">Neurons</div>
-          <div className="stat-value">{Math.floor(progress * 8.47)}</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-label">Synapses</div>
-          <div className="stat-value">{Math.floor(progress * 28.47)}</div>
-        </div>
-        <div className="stat-item">
-          <div className="stat-label">Networks</div>
-          <div className="stat-value">{Math.floor(progress * 0.06)}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Custom Cursor
-const CustomCursor = () => {
-  const cursorRef = useRef(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      if (cursorRef.current) {
-        cursorRef.current.style.left = e.clientX + 'px';
-        cursorRef.current.style.top = e.clientY + 'px';
-      }
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  return <div ref={cursorRef} className="custom-cursor"></div>;
-};
-
-// Neural Network Scene
-const NeuralScene = ({ currentPhase }) => {
-  const groupRef = useRef();
-  const neuronsRef = useRef([]);
-  const connectionsRef = useRef([]);
-
-  // Work experiences (placeholder - add your actual work experience)
-  const workExperiences = [
-    { title: 'AI Engineer', company: 'Current', position: new THREE.Vector3(-3, 2, 0), color: 0x00F5FF },
-    { title: 'ML Developer', company: 'Previous', position: new THREE.Vector3(-1, 2, 0), color: 0xA855F7 },
-    { title: 'Research Assistant', company: 'FSU', position: new THREE.Vector3(1, 2, 0), color: 0x10B981 },
-  ];
-
-  // Create neuron positions based on phase
-  const neuronData = useMemo(() => {
-    if (currentPhase === 1) return []; // Data nucleus - just center sphere
-    if (currentPhase === 2) return []; // Overview - expanding network
-
-    if (currentPhase === 3) {
-      // Experience - Linear horizontal arrangement
-      return workExperiences.map((exp, i) => ({
-        ...exp,
-        position: new THREE.Vector3(i * 3 - 3, 0, 0)
-      }));
-    }
-
-    if (currentPhase === 4) {
-      // Projects - Scattered arrangement
-      return projects.map((proj, i) => {
-        const angle = (i / projects.length) * Math.PI * 2;
-        const radius = 3 + Math.random() * 2;
-        return {
-          title: proj.name,
-          description: proj.description,
-          tags: proj.tags,
-          position: new THREE.Vector3(
-            Math.cos(angle) * radius,
-            (Math.random() - 0.5) * 2,
-            Math.sin(angle) * radius
-          ),
-          color: 0x00F5FF
-        };
+    const temp = [];
+    for (let i = 0; i < 50; i++) {
+      temp.push({
+        id: i,
+        x: (Math.random() - 0.5) * 4,
+        y: Math.random() * 25,
+        z: -10 + (Math.random() - 0.5) * 3,
+        speed: 0.05 + Math.random() * 0.05
       });
     }
+    setBlocks(temp);
+  }, []);
 
-    if (currentPhase === 5) {
-      // Tech stack - Random scattered
-      return technologies.map((tech, i) => {
-        const angle = (i / technologies.length) * Math.PI * 2;
-        const radius = 4;
-        return {
-          title: tech.name,
-          position: new THREE.Vector3(
-            Math.cos(angle) * radius + (Math.random() - 0.5),
-            (Math.random() - 0.5) * 3,
-            Math.sin(angle) * radius + (Math.random() - 0.5)
-          ),
-          color: 0xA855F7
-        };
-      });
-    }
-
-    if (currentPhase === 6) {
-      // Education - Semi-linear vertical
-      return educations.map((edu, i) => ({
-        ...edu,
-        position: new THREE.Vector3((i - 0.5) * 2, -i * 2, 0),
-        color: 0x10B981
-      }));
-    }
-
-    return [];
-  }, [currentPhase]);
-
-  useFrame((state) => {
-    const time = state.clock.elapsedTime;
-
-    if (groupRef.current) {
-      groupRef.current.rotation.y += 0.001;
-    }
-
-    // Animate neurons
-    neuronsRef.current.forEach((neuron, i) => {
-      if (neuron) {
-        neuron.rotation.y += 0.02;
-        const scale = 1 + Math.sin(time * 2 + i) * 0.1;
-        neuron.scale.set(scale, scale, scale);
-      }
-    });
+  useFrame(() => {
+    setBlocks(prev => prev.map(block => ({
+      ...block,
+      y: block.y - block.speed < -5 ? 25 : block.y - block.speed
+    })));
   });
 
   return (
-    <group ref={groupRef}>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[0, 0, 0]} intensity={2.5} color={0x00F5FF} />
-      <pointLight position={[5, 5, 5]} intensity={1} color={0xA855F7} />
-      <pointLight position={[-5, -5, -5]} intensity={0.8} color={0x10B981} />
+    <group position={[0, 30, -10]}>
+      {/* Source pool - Minecraft style blocks */}
+      {[...Array(20)].map((_, i) => (
+        <Box key={`pool-${i}`} args={[2, 2, 2]} position={[
+          (i % 4 - 1.5) * 2,
+          10,
+          (Math.floor(i / 4) - 1.5) * 2
+        ]}>
+          <meshStandardMaterial color="#1E90FF" emissive="#1E90FF" emissiveIntensity={0.5} />
+        </Box>
+      ))}
 
-      {/* Phase 1: Central Data Nucleus */}
-      {currentPhase === 1 && (
-        <mesh>
-          <icosahedronGeometry args={[2, 3]} />
+      {/* Falling water blocks */}
+      {blocks.map(block => (
+        <Box key={block.id} args={[1.5, 1.5, 1.5]} position={[block.x, block.y, block.z]}>
           <meshStandardMaterial
-            color={0x00F5FF}
-            emissive={0x00F5FF}
+            color="#00BFFF"
+            emissive="#00BFFF"
             emissiveIntensity={0.6}
             transparent
             opacity={0.8}
-            metalness={0.9}
-            roughness={0.1}
           />
-        </mesh>
-      )}
-
-      {/* Phase 2: Expanding network */}
-      {currentPhase === 2 && (
-        <>
-          <mesh>
-            <sphereGeometry args={[1.5, 32, 32]} />
-            <meshStandardMaterial
-              color={0x00F5FF}
-              emissive={0x00F5FF}
-              emissiveIntensity={0.5}
-              wireframe
-            />
-          </mesh>
-          {[0, 1, 2, 3, 4, 5].map((i) => {
-            const angle = (i / 6) * Math.PI * 2;
-            return (
-              <mesh key={i} position={[Math.cos(angle) * 3, Math.sin(angle) * 3, 0]}>
-                <sphereGeometry args={[0.2, 16, 16]} />
-                <meshStandardMaterial
-                  color={0xA855F7}
-                  emissive={0xA855F7}
-                  emissiveIntensity={0.5}
-                />
-              </mesh>
-            );
-          })}
-        </>
-      )}
-
-      {/* Phases 3-6: Neurons */}
-      {(currentPhase >= 3 && currentPhase <= 6) && neuronData.map((neuron, i) => (
-        <mesh
-          key={i}
-          position={neuron.position}
-          ref={(el) => (neuronsRef.current[i] = el)}
-          userData={neuron}
-        >
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial
-            color={neuron.color}
-            emissive={neuron.color}
-            emissiveIntensity={0.5}
-          />
-        </mesh>
+        </Box>
       ))}
 
-      {/* Background particles */}
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={1000}
-            array={new Float32Array(Array.from({ length: 3000 }, () => (Math.random() - 0.5) * 20))}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <pointsMaterial size={0.02} color={0x00F5FF} transparent opacity={0.6} />
-      </points>
+      <pointLight position={[0, 5, 0]} intensity={3} color="#00BFFF" distance={30} />
     </group>
   );
-};
+}
 
-function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentPhase, setCurrentPhase] = useState(1);
-  const [hoveredNeuron, setHoveredNeuron] = useState(null);
+// ========================================
+// MINECRAFT RIVER - Blocky Blue Path
+// ========================================
+function River() {
+  return (
+    <group>
+      {/* River made of water blocks flowing down the landscape */}
+      {[...Array(30)].map((_, i) => {
+        const y = -i * 6;
+        return (
+          <group key={i}>
+            {/* Main river channel - 3 blocks wide */}
+            {[-2, 0, 2].map((x, j) => (
+              <Box key={`river-${i}-${j}`} args={[2, 1, 3]} position={[x, y, i * 3 - 20]}>
+                <meshStandardMaterial
+                  color="#1E90FF"
+                  emissive="#1E90FF"
+                  emissiveIntensity={0.4}
+                  transparent
+                  opacity={0.7}
+                />
+              </Box>
+            ))}
+            {/* Flowing blocks on river */}
+            <Box args={[1, 1, 1]} position={[(i % 3 - 1) * 2, y + 1, i * 3 - 20]}>
+              <meshStandardMaterial
+                color="#00BFFF"
+                emissive="#00BFFF"
+                emissiveIntensity={0.5}
+              />
+            </Box>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ========================================
+// MINECRAFT MOUNTAINS - Stacked Stone Blocks
+// ========================================
+function Mountains() {
+  return (
+    <group>
+      {/* Left side mountains */}
+      {[0, 1, 2].map((mIdx) => {
+        const baseY = -20 - mIdx * 25;
+        const baseX = -15 - mIdx * 3;
+        const baseZ = -15 + mIdx * 10;
+        const height = 8 + mIdx * 2;
+
+        return (
+          <group key={`left-mountain-${mIdx}`}>
+            {/* Stack blocks to form pyramid mountain */}
+            {[...Array(height)].map((_, layer) => {
+              const size = height - layer;
+              return [...Array(size)].map((_, x) =>
+                [...Array(size)].map((_, z) => (
+                  <Box
+                    key={`${mIdx}-${layer}-${x}-${z}`}
+                    args={[2, 2, 2]}
+                    position={[
+                      baseX + (x - size / 2) * 2,
+                      baseY + layer * 2,
+                      baseZ + (z - size / 2) * 2
+                    ]}
+                  >
+                    <meshStandardMaterial
+                      color={layer % 2 === 0 ? "#556B2F" : "#6B8E23"}
+                      emissive="#2F4F2F"
+                      emissiveIntensity={0.2}
+                    />
+                  </Box>
+                ))
+              );
+            })}
+          </group>
+        );
+      })}
+
+      {/* Right side mountains */}
+      {[0, 1, 2].map((mIdx) => {
+        const baseY = -30 - mIdx * 25;
+        const baseX = 15 + mIdx * 3;
+        const baseZ = -10 + mIdx * 10;
+        const height = 7 + mIdx * 2;
+
+        return (
+          <group key={`right-mountain-${mIdx}`}>
+            {[...Array(height)].map((_, layer) => {
+              const size = height - layer;
+              return [...Array(size)].map((_, x) =>
+                [...Array(size)].map((_, z) => (
+                  <Box
+                    key={`${mIdx}-${layer}-${x}-${z}`}
+                    args={[2, 2, 2]}
+                    position={[
+                      baseX + (x - size / 2) * 2,
+                      baseY + layer * 2,
+                      baseZ + (z - size / 2) * 2
+                    ]}
+                  >
+                    <meshStandardMaterial
+                      color={layer % 2 === 0 ? "#8B4513" : "#A0522D"}
+                      emissive="#654321"
+                      emissiveIntensity={0.2}
+                    />
+                  </Box>
+                ))
+              );
+            })}
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ========================================
+// MINECRAFT TERRAIN - Grass Blocks
+// ========================================
+function Terrain() {
+  return (
+    <group>
+      {/* Grass block terrain at different levels */}
+      {[...Array(25)].map((_, section) => {
+        const baseY = -section * 6 - 2;
+        const baseZ = section * 4 - 25;
+
+        return (
+          <group key={section}>
+            {/* Create patches of grass blocks */}
+            {[...Array(10)].map((_, x) =>
+              [...Array(8)].map((_, z) => (
+                <Box
+                  key={`terrain-${section}-${x}-${z}`}
+                  args={[2, 2, 2]}
+                  position={[
+                    (x - 5) * 2,
+                    baseY - (Math.random() > 0.7 ? 2 : 0),
+                    baseZ + z * 2
+                  ]}
+                >
+                  <meshStandardMaterial
+                    color="#228B22"
+                    emissive="#006400"
+                    emissiveIntensity={0.1}
+                  />
+                </Box>
+              ))
+            )}
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ========================================
+// MINECRAFT TREES - Trunk + Leaf Blocks
+// ========================================
+function Trees() {
+  return (
+    <group>
+      {[...Array(20)].map((_, i) => {
+        const y = -i * 8 - 5;
+        const x = (i % 2 === 0 ? 1 : -1) * (8 + (i % 3) * 3);
+        const z = i * 5 - 20;
+
+        return (
+          <group key={i} position={[x, y, z]}>
+            {/* Tree trunk - brown blocks */}
+            {[...Array(5)].map((_, h) => (
+              <Box key={`trunk-${h}`} args={[1, 2, 1]} position={[0, h * 2, 0]}>
+                <meshStandardMaterial
+                  color="#8B4513"
+                  emissive="#654321"
+                  emissiveIntensity={0.1}
+                />
+              </Box>
+            ))}
+
+            {/* Leaves - green blocks */}
+            {[...Array(3)].map((_, lx) =>
+              [...Array(3)].map((_, ly) =>
+                [...Array(3)].map((_, lz) => (
+                  <Box
+                    key={`leaf-${lx}-${ly}-${lz}`}
+                    args={[1.5, 1.5, 1.5]}
+                    position={[(lx - 1) * 1.5, 9 + ly * 1.5, (lz - 1) * 1.5]}
+                  >
+                    <meshStandardMaterial
+                      color="#32CD32"
+                      emissive="#228B22"
+                      emissiveIntensity={0.2}
+                    />
+                  </Box>
+                ))
+              )
+            )}
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ========================================
+// MINECRAFT BIRDS - Flying Cubes
+// ========================================
+function Birds() {
+  const [birds, setBirds] = useState([]);
 
   useEffect(() => {
-    if (isLoading) return;
+    const temp = [];
+    for (let i = 0; i < 15; i++) {
+      temp.push({
+        id: i,
+        x: (Math.random() - 0.5) * 40,
+        y: 20 - i * 10 + Math.random() * 5,
+        z: (Math.random() - 0.5) * 40,
+        speed: 0.02 + Math.random() * 0.03,
+        direction: Math.random() > 0.5 ? 1 : -1
+      });
+    }
+    setBirds(temp);
+  }, []);
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const progress = scrollY / maxScroll;
-
-      // 7 phases total
-      const newPhase = Math.min(7, Math.floor(progress * 7) + 1);
-      setCurrentPhase(newPhase);
-
-      // Hide scroll indicator
-      const indicator = document.getElementById('scroll-hint');
-      if (indicator) {
-        indicator.style.opacity = scrollY > 100 ? '0' : '1';
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    document.body.style.height = '700vh'; // 7 phases
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.height = 'auto';
-    };
-  }, [isLoading]);
-
-  const handlePhaseClick = (phase) => {
-    const scrollTarget = ((phase - 1) / 7) * (document.body.scrollHeight - window.innerHeight);
-    window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-  };
-
-  if (isLoading) {
-    return <Preloader onComplete={() => setIsLoading(false)} />;
-  }
+  useFrame(() => {
+    setBirds(prev => prev.map(bird => {
+      const newX = bird.x + bird.speed * bird.direction;
+      return {
+        ...bird,
+        x: newX > 30 || newX < -30 ? bird.x - bird.speed * bird.direction : newX
+      };
+    }));
+  });
 
   return (
+    <group>
+      {birds.map(bird => (
+        <group key={bird.id} position={[bird.x, bird.y, bird.z]}>
+          {/* Body */}
+          <Box args={[1, 0.5, 1.5]}>
+            <meshStandardMaterial color="#4169E1" emissive="#1E3A8A" emissiveIntensity={0.3} />
+          </Box>
+          {/* Wings */}
+          <Box args={[2, 0.2, 0.5]} position={[0, 0, 0]}>
+            <meshStandardMaterial color="#6495ED" emissive="#2563EB" emissiveIntensity={0.2} />
+          </Box>
+        </group>
+      ))}
+    </group>
+  );
+}
+
+// ========================================
+// CAMERA PATH - Follows the river down
+// ========================================
+function CameraPath() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    gsap.to(camera.position, {
+      y: -150,
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
+      }
+    });
+
+    gsap.to(camera.position, {
+      z: 20,
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
+      }
+    });
+
+    // Slight side-to-side movement
+    gsap.to(camera.position, {
+      x: -5,
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1,
+      }
+    });
+
+    gsap.to(camera.position, {
+      x: 5,
+      scrollTrigger: {
+        trigger: '.projects',
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1,
+      }
+    });
+
+    gsap.to(camera.position, {
+      x: 0,
+      scrollTrigger: {
+        trigger: '.contact',
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1,
+      }
+    });
+
+  }, [camera]);
+
+  return null;
+}
+
+// ========================================
+// GRASS PATCHES - Scattered Decoration
+// ========================================
+function GrassPatches() {
+  return (
+    <group>
+      {[...Array(50)].map((_, i) => (
+        <Box
+          key={i}
+          args={[0.3, 1, 0.3]}
+          position={[
+            (Math.random() - 0.5) * 30,
+            -i * 3,
+            (Math.random() - 0.5) * 30
+          ]}
+        >
+          <meshStandardMaterial
+            color="#90EE90"
+            emissive="#00FF00"
+            emissiveIntensity={0.3}
+          />
+        </Box>
+      ))}
+    </group>
+  );
+}
+
+// ========================================
+// MAIN SCENE
+// ========================================
+function Scene() {
+  return (
     <>
-      <CustomCursor />
+      {/* Much brighter lighting to make everything visible */}
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[20, 40, 20]} intensity={2} color="#FFE4B5" />
+      <directionalLight position={[-20, 30, -20]} intensity={1.5} color="#87CEEB" />
 
-      {/* Navigation */}
-      <nav className="nav">
-        <div className="logo">NEURAL.AI</div>
-        <div className="phase-nav">
-          {[1, 2, 3, 4, 5, 6, 7].map(phase => (
-            <div
-              key={phase}
-              className={`phase-indicator ${currentPhase === phase ? 'active' : ''}`}
-              onClick={() => handlePhaseClick(phase)}
-            >
-              <div className="phase-dot"></div>
-              <div className="phase-label">
-                {['Start', 'About', 'Work', 'Projects', 'Tech', 'Education', 'Contact'][phase - 1]}
-              </div>
-            </div>
-          ))}
-        </div>
-      </nav>
+      {/* Colored point lights throughout the journey */}
+      <pointLight position={[0, 30, 0]} intensity={3} color="#FFD700" distance={40} />
+      <pointLight position={[0, 0, 0]} intensity={2} color="#00BFFF" distance={35} />
+      <pointLight position={[0, -50, 0]} intensity={2.5} color="#32CD32" distance={40} />
+      <pointLight position={[0, -100, 0]} intensity={2} color="#FF69B4" distance={35} />
+      <pointLight position={[0, -150, 0]} intensity={2} color="#9370DB" distance={40} />
 
-      {/* Canvas */}
-      <div className="canvas-container">
-        <Canvas camera={{ position: [0, 0, 8], fov: 75 }}>
-          <NeuralScene currentPhase={currentPhase} />
-        </Canvas>
-      </div>
+      {/* Lighter fog for better visibility */}
+      <fog attach="fog" args={['#1a1a2e', 50, 200]} />
 
-      {/* Phase 1: Data Nucleus - Name & Designation */}
-      <div className={`phase-info ${currentPhase === 1 ? 'active' : ''}`}>
-        <div className="phase-number">01</div>
-        <div className="phase-title-large">NISHANTH AYYALASOMAYAJULA</div>
-        <div className="phase-subtitle-large">AI/GenAI Engineer</div>
-        <div className="phase-description">Building Intelligent Systems • Architecting the Future</div>
-      </div>
-
-      {/* Phase 2: Overview */}
-      <div className={`phase-info ${currentPhase === 2 ? 'active' : ''}`}>
-        <div className="phase-number">02</div>
-        <div className="phase-title">NEURAL ARCHITECT</div>
-        <div className="phase-subtitle">"Expanding networks of intelligence"</div>
-        <div className="phase-description">
-          Specializing in building autonomous agentic AI systems using LangGraph, AWS Bedrock, and cutting-edge LLMs.
-          Expert in RAG architectures, multi-agent orchestration, and deploying production-grade AI solutions
-          that transform business operations. Currently pursuing M.S. in Information Technology at Florida State University,
-          focusing on Machine Learning, NLP, and Large Language Model applications.
-        </div>
-      </div>
-
-      {/* Phase 3: Work Experience */}
-      <div className={`phase-info ${currentPhase === 3 ? 'active' : ''}`}>
-        <div className="phase-number">03</div>
-        <div className="phase-title">WORK EXPERIENCE</div>
-        <div className="phase-subtitle">"Professional journey"</div>
-        <div className="phase-description">
-          Hover over neurons to explore work experiences. Each connection represents skills
-          and technologies learned along the way.
-        </div>
-      </div>
-
-      {/* Phase 4: Projects */}
-      <div className={`phase-info ${currentPhase === 4 ? 'active' : ''}`}>
-        <div className="phase-number">04</div>
-        <div className="phase-title">PROJECTS</div>
-        <div className="phase-subtitle">"Innovations in action"</div>
-        <div className="project-grid">
-          {projects.map((proj, i) => (
-            <div key={i} className="project-card-mini">
-              <h3>{proj.name}</h3>
-              <p>{proj.description}</p>
-              <div className="tech-tags">
-                {proj.tags.map(tag => (
-                  <span key={tag.name} className="tech-tag">{tag.name}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Phase 5: Tech Stack */}
-      <div className={`phase-info ${currentPhase === 5 ? 'active' : ''}`}>
-        <div className="phase-number">05</div>
-        <div className="phase-title">TECH STACK</div>
-        <div className="phase-subtitle">"Tools of creation"</div>
-        <div className="tech-grid">
-          {technologies.map((tech, i) => (
-            <div key={i} className="tech-item">
-              <div className="tech-name">{tech.name}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Phase 6: Education */}
-      <div className={`phase-info ${currentPhase === 6 ? 'active' : ''}`}>
-        <div className="phase-number">06</div>
-        <div className="phase-title">EDUCATION</div>
-        <div className="phase-subtitle">"Foundation of knowledge"</div>
-        <div className="education-list">
-          {educations.map((edu, i) => (
-            <div key={i} className="education-card">
-              <h3>{edu.title}</h3>
-              <p className="edu-institution">{edu.company_name}</p>
-              <p className="edu-date">{edu.date}</p>
-              <ul>
-                {edu.points.map((point, j) => (
-                  <li key={j}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Phase 7: Contact */}
-      <div className={`contact-overlay ${currentPhase === 7 ? 'active' : ''}`}>
-        <h1>LET'S CONNECT</h1>
-        <div className="tagline">Ready to build something amazing?</div>
-        <div className="contact-grid">
-          <a href="mailto:nayyalasomayaj@fsu.edu" className="contact-btn">
-            <span>📧</span> Email
-          </a>
-          <a href="https://linkedin.com/in/nishanth-ayyalasomayajula" className="contact-btn" target="_blank" rel="noopener noreferrer">
-            <span>💼</span> LinkedIn
-          </a>
-          <a href="https://github.com/nishanth1104" className="contact-btn" target="_blank" rel="noopener noreferrer">
-            <span>💻</span> GitHub
-          </a>
-          <a href="#" className="contact-btn">
-            <span>📄</span> Resume
-          </a>
-        </div>
-      </div>
-
-      {/* Scroll Hint */}
-      <div className="scroll-hint" id="scroll-hint">
-        <span>SCROLL TO EXPLORE</span>
-        <div className="scroll-arrow"></div>
-      </div>
-
-      {/* Detail Card for Neurons */}
-      {hoveredNeuron && (
-        <div className="neuron-detail visible">
-          <div className="close-detail" onClick={() => setHoveredNeuron(null)}>×</div>
-          <h2>{hoveredNeuron.title}</h2>
-          <p>{hoveredNeuron.description}</p>
-        </div>
-      )}
+      {/* Minecraft World Components */}
+      <Waterfall />
+      <River />
+      <Mountains />
+      <Terrain />
+      <Trees />
+      <Birds />
+      <GrassPatches />
+      <CameraPath />
     </>
   );
 }
 
-export default App;
+// ========================================
+// MAIN APP
+// ========================================
+export default function App() {
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Animations
+    gsap.utils.toArray('.fade-in').forEach((elem) => {
+      gsap.fromTo(elem,
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: elem,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+    });
+
+    gsap.utils.toArray('.stagger-container').forEach((container) => {
+      gsap.fromTo(container.children,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+    });
+
+    gsap.to('.progress-bar', {
+      scaleY: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+      }
+    });
+
+    return () => {
+      lenis.destroy();
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
+  return (
+    <div className="app">
+      {/* 3D Canvas - Continuous Landscape */}
+      <div className="canvas-bg">
+        <Canvas camera={{ position: [0, 35, 15], fov: 60 }}>
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </Canvas>
+      </div>
+
+      {/* Content */}
+      <main className="content">
+        {/* HERO - At the waterfall */}
+        <section className="section hero">
+          <div className="container">
+            <h1 className="hero-title">
+              <div className="fade-in">NISHANTH</div>
+              <div className="fade-in">AYYALASOMAYAJULA</div>
+            </h1>
+            <p className="hero-subtitle fade-in">AI Engineer & Architect</p>
+            <p className="hero-desc fade-in">Journey through the landscape of innovation</p>
+          </div>
+        </section>
+
+        {/* ABOUT - Upper river */}
+        <section className="section about">
+          <div className="container">
+            <h2 className="title fade-in">About Me</h2>
+            <div className="text-content stagger-container">
+              <p>
+                Specializing in building <span className="highlight">autonomous agentic AI systems</span> using
+                <span className="highlight"> LangGraph</span>, <span className="highlight">AWS Bedrock</span>, and cutting-edge
+                <span className="highlight"> LLMs</span>.
+              </p>
+              <p>
+                Expert in <span className="highlight">RAG architectures</span>, <span className="highlight">multi-agent orchestration</span>,
+                and deploying production-grade AI solutions.
+              </p>
+              <p>
+                Currently pursuing M.S. in Information Technology at Florida State University.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* EXPERIENCE - Mid river valley */}
+        <section className="section experience">
+          <div className="container">
+            <h2 className="title fade-in">Experience</h2>
+            <div className="cards stagger-container">
+              {experiences.map((exp, i) => (
+                <div key={i} className="card">
+                  <div className="card-header">
+                    <h3>{exp.title}</h3>
+                    <span>{exp.date}</span>
+                  </div>
+                  <h4>{exp.company_name}</h4>
+                  <ul>
+                    {exp.points.map((point, j) => (
+                      <li key={j}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SKILLS - Lower plains */}
+        <section className="section skills">
+          <div className="container">
+            <h2 className="title fade-in">Tech Stack</h2>
+            <div className="grid stagger-container">
+              {technologies.map((tech, i) => (
+                <div key={i} className="skill">
+                  {tech.name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PROJECTS - Delta/Lake area */}
+        <section className="section projects">
+          <div className="container">
+            <h2 className="title fade-in">Featured Projects</h2>
+            <div className="project-grid stagger-container">
+              {projects.map((proj, i) => (
+                <div
+                  key={i}
+                  className={`project ${i % 3 === 0 ? 'large' : ''}`}
+                  onClick={() => setSelectedProject(proj)}
+                >
+                  <div className="project-image">
+                    {proj.image ? (
+                      <img src={proj.image} alt={proj.name} />
+                    ) : (
+                      <div className="image-placeholder">
+                        <span>Project Preview</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="project-content">
+                    <h3>{proj.name}</h3>
+                    <p>{proj.description}</p>
+                    <div className="tags">
+                      {proj.tags.map((tag, j) => (
+                        <span key={j}>{tag.name}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* EDUCATION - Peaceful garden */}
+        <section className="section education">
+          <div className="container">
+            <h2 className="title fade-in">Education</h2>
+            <div className="edu-list stagger-container">
+              {educations.map((edu, i) => (
+                <div key={i} className="edu-item">
+                  <h3>{edu.title}</h3>
+                  <h4>{edu.company_name}</h4>
+                  <p className="date">{edu.date}</p>
+                  <ul>
+                    {edu.points.map((point, j) => (
+                      <li key={j}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT - Ocean/Horizon */}
+        <section className="section contact">
+          <div className="container center">
+            <h2 className="contact-title fade-in">Let's Connect</h2>
+            <p className="contact-sub fade-in">Ready to build something amazing?</p>
+            <div className="contact-btns stagger-container">
+              <a href="mailto:nayyalasomayaj@fsu.edu" className="btn">Email</a>
+              <a href="https://linkedin.com/in/nishanth-ayyalasomayajula" target="_blank" rel="noopener noreferrer" className="btn">LinkedIn</a>
+              <a href="https://github.com/nishanth1104" target="_blank" rel="noopener noreferrer" className="btn">GitHub</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Modal */}
+      {selectedProject && (
+        <div className="modal" onClick={() => setSelectedProject(null)}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <button className="close" onClick={() => setSelectedProject(null)}>×</button>
+
+            {selectedProject.image && (
+              <div className="modal-image">
+                <img src={selectedProject.image} alt={selectedProject.name} />
+              </div>
+            )}
+
+            <h2>{selectedProject.name}</h2>
+            <p>{selectedProject.description}</p>
+            <div className="tags">
+              {selectedProject.tags.map((tag, i) => (
+                <span key={i}>{tag.name}</span>
+              ))}
+            </div>
+            <a href={selectedProject.source_code_link} target="_blank" rel="noopener noreferrer" className="btn">
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Progress */}
+      <div className="progress">
+        <div className="progress-bar"></div>
+      </div>
+    </div>
+  );
+}
