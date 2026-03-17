@@ -1,0 +1,12 @@
+.dotGrid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--color-text-dim) 1px, transparent 1px);
+  background-size: 28px 28px;
+  /* vignette on top */
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}

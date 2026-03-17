@@ -1,0 +1,230 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem 4rem;
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  width: 100%;
+}
+
+/* ─── Name ─── */
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.nameLine {
+  display: block;
+  color: var(--color-text);
+}
+
+.nameLineDim {
+  color: var(--color-text-dim);
+}
+
+/* Glitch on name hover */
+@keyframes glitch {
+  0%   { clip-path: inset(40% 0 60% 0); transform: translate(-4px, 0); filter: hue-rotate(0deg); }
+  20%  { clip-path: inset(10% 0 85% 0); transform: translate(4px, 0);  filter: hue-rotate(90deg); }
+  40%  { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 0); filter: hue-rotate(0deg); }
+  60%  { clip-path: inset(20% 0 75% 0); transform: translate(3px, 0);  filter: hue-rotate(180deg); }
+  80%  { clip-path: inset(55% 0 35% 0); transform: translate(-3px, 0); filter: hue-rotate(0deg); }
+  100% { clip-path: inset(40% 0 60% 0); transform: translate(0, 0);   filter: hue-rotate(0deg); }
+}
+
+.name:hover {
+  animation: glitch 0.4s steps(1) 1;
+}
+
+/* ─── Role typing ─── */
+.roleLine {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 500;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.prompt {
+  color: var(--color-text-dim);
+}
+
+.role {
+  color: var(--color-accent);
+}
+
+.cursor {
+  display: inline-block;
+  color: var(--color-accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── CTAs ─── */
+.ctas {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ctaPrimary {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  padding: 0.75rem 2rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ctaPrimary:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.ctaSecondary {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-dim);
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+
+.ctaSecondary:hover {
+  color: var(--color-text);
+}
+
+/* ─── Floating Tags ─── */
+.floatingTag {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-text-dim);
+  background: rgba(24, 24, 27, 0.7);
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-16px); }
+}
+
+/* ─── Stats bar ─── */
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.statNum {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ─── Scroll indicator ─── */
+.scrollIndicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 48px;
+  background: var(--color-accent);
+  transform-origin: top;
+}
+
+.scrollHint {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 768px) {
+  .hero {
+    padding: 5rem 1.5rem 5rem;
+    align-items: flex-start;
+  }
+
+  .floatingTag {
+    display: none;
+  }
+
+  .name {
+    font-size: clamp(2.2rem, 11vw, 3.5rem);
+  }
+
+  .ctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .scrollIndicator {
+    display: none;
+  }
+}

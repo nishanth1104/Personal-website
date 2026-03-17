@@ -1,93 +1,115 @@
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import ScrollReveal from './ui/ScrollReveal'
+import SectionLabel from './ui/SectionLabel'
+import TextReveal from './ui/TextReveal'
+import FloatingTags from './ui/FloatingTags'
+import styles from './styles/experience.module.css'
+import { experiences } from '../constants/constants'
 
-import "react-vertical-timeline-component/style.min.css";
+const FLOATING = [
+  { label: 'FSU',        left: '6%',  top: '18%', delay: 0.5 },
+  { label: 'CBIT',       left: '80%', top: '12%', delay: 0.3 },
+  { label: 'M.S.',       left: '85%', top: '60%', delay: 0.8 },
+  { label: 'Research',   left: '5%',  top: '72%', delay: 0.2 },
+  { label: 'NLP',        left: '90%', top: '35%', delay: 1.0 },
+  { label: 'Agentic AI', left: '20%', top: '90%', delay: 0.6 },
+]
 
-import { educations } from "../constants";
+const bulletVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+}
 
-const ExperienceCard = ({ education }) => {
+const bulletItem = {
+  hidden: { opacity: 0, x: -20 },
+  show:   { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+}
+
+function ExperienceCard({ exp, index }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+
   return (
-    <VerticalTimelineElement
-      contentStyle={{
-        background: "var(--glass-bg)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid var(--glass-border)",
-        borderRadius: "20px",
-        padding: "40px",
-        boxShadow: "none",
-      }}
-      contentArrowStyle={{ borderRight: "7px solid var(--glass-border)" }}
-      date={education.date}
-      iconStyle={{
-        background: education.iconBg,
-        boxShadow: "0 0 0 4px var(--glass-border)",
-      }}
-      icon={
-        <div className="flex justify-center items-center w-full h-full">
-          <img
-            src={education.icon}
-            alt={education.company_name}
-            className="w-[60%] h-[60%] object-contain"
-          />
-        </div>
-      }
+    <motion.div
+      ref={ref}
+      className={styles.card}
+      initial={{ opacity: 0, x: -60 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div>
-        <h3 className="text-white text-2xl font-bold">{education.title}</h3>
-        <p
-          className="text-[var(--text-secondary)] text-base font-semibold mt-2"
-          style={{ margin: 0 }}
-        >
-          {education.company_name}
-        </p>
+      <div className={styles.logoSide}>
+        <div className={styles.logoRing}>
+          <img src={exp.icon} alt={exp.company_name} className={styles.logo} />
+        </div>
       </div>
 
-      <ul className="mt-6 list-disc ml-5 space-y-2">
-        {education.points.map((point, index) => (
-          <li
-            key={`education-point-${index}`}
-            className="text-[var(--text-secondary)] text-[15px] pl-1 tracking-wide leading-relaxed"
-          >
-            {point}
-          </li>
-        ))}
-      </ul>
-    </VerticalTimelineElement>
-  );
-};
+      <div className={styles.content}>
+        <span className={styles.roleBadge}>
+          {exp.title.split(' in ')[0].trim()}
+        </span>
+        <h3 className={styles.degree}>{exp.title}</h3>
+        <div className={styles.meta}>
+          <span className={styles.institution}>{exp.company_name}</span>
+          <span className={styles.sep}>·</span>
+          <span className={styles.date}>{exp.date}</span>
+        </div>
 
-const Experience = () => {
-  return (
-    <section id="work" className="section-padding relative">
-      <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <motion.ul
+          className={styles.points}
+          variants={bulletVariants}
+          initial="hidden"
+          animate={inView ? 'show' : 'hidden'}
         >
-          <p className="section-subtitle text-center">What I have done so far</p>
-          <h2 className="section-title text-center mt-4 mb-20">Education</h2>
-        </motion.div>
+          {exp.points.map((pt, i) => (
+            <motion.li key={i} className={styles.point} variants={bulletItem}>
+              <span className={styles.bullet} aria-hidden="true">▸</span>
+              {pt}
+            </motion.li>
+          ))}
+        </motion.ul>
+      </div>
+    </motion.div>
+  )
+}
 
-        <div className="mt-20 flex flex-col">
-          <VerticalTimeline lineColor="var(--glass-border)">
-            {educations.map((education, index) => (
-              <ExperienceCard
-                key={`education-${index}`}
-                education={education}
-              />
+export default function Experience() {
+  const stackRef    = useRef(null)
+  const stackInView = useInView(stackRef, { once: true, margin: '-80px' })
+
+  return (
+    <section
+      id="experience"
+      className={styles.section}
+      style={{ position: 'relative', overflow: 'hidden' }}
+    >
+      <FloatingTags tags={FLOATING} />
+
+      <div className={styles.container}>
+        <ScrollReveal>
+          <SectionLabel index={3} label="Experience" />
+          <TextReveal>
+            <h2 className={styles.heading}>Education & Background</h2>
+          </TextReveal>
+        </ScrollReveal>
+
+        <div className={styles.stackWrap} ref={stackRef}>
+          {/* Animated vertical timeline line */}
+          <motion.div
+            className={styles.timelineLine}
+            initial={{ height: 0 }}
+            animate={stackInView ? { height: '100%' } : {}}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden="true"
+          />
+
+          <div className={styles.stack}>
+            {experiences.map((exp, i) => (
+              <ExperienceCard key={exp.company_name} exp={exp} index={i} />
             ))}
-          </VerticalTimeline>
+          </div>
         </div>
       </div>
     </section>
-  );
-};
-
-export default Experience;
+  )
+}

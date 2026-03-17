@@ -1,0 +1,254 @@
+.section {
+  padding: 7rem 2rem;
+  background: var(--color-surface);
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 3rem;
+  line-height: 1.1;
+}
+
+/* ─── Terminal window ─── */
+.terminal {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.chrome {
+  background: #1C1C1E;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.chromeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  margin-left: 0.75rem;
+}
+
+.body {
+  background: #0D0D0F;
+  padding: 1.75rem;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* ─── Terminal lines ─── */
+.termLine {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.cmdLine {
+  color: var(--color-accent);
+}
+
+.outLine {
+  color: var(--color-text-dim);
+}
+
+.termCursor {
+  display: inline-block;
+  color: var(--color-accent);
+  animation: blink 0.9s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─── CTAs ─── */
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.ctaLink {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+
+.ctaLink:hover {
+  opacity: 0.75;
+}
+
+.ctaLinkSecondary {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-dim);
+  transition: color 0.2s;
+}
+
+.ctaLinkSecondary:hover {
+  color: var(--color-text);
+}
+
+/* ─── Form ─── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  min-width: 6.5rem;
+  flex-shrink: 0;
+}
+
+.fieldInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.35rem 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.fieldInput::placeholder {
+  color: var(--color-border);
+}
+
+.fieldInput:focus {
+  border-bottom-color: var(--color-accent);
+}
+
+.submitBtn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  padding: 0.6rem 1.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-top: 0.25rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Status messages ─── */
+.statusMsg {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.statusOk {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-accent);
+}
+
+.statusErr {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-warm);
+}
+
+.retryBtn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  border: 1px solid var(--color-border);
+  padding: 0.4rem 1rem;
+  background: transparent;
+  cursor: pointer;
+  width: fit-content;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.retryBtn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 5rem 1.5rem;
+  }
+
+  .body {
+    padding: 1.25rem;
+  }
+
+  .fieldRow {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .fieldLabel {
+    min-width: auto;
+  }
+
+  .fieldInput {
+    width: 100%;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

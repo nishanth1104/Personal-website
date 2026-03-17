@@ -1,142 +1,179 @@
-import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
+import { useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
+import emailjs from '@emailjs/browser'
+import SectionLabel from './ui/SectionLabel'
+import FloatingTags from './ui/FloatingTags'
+import styles from './styles/contact.module.css'
+import resumePdf from '../assets/Nishanth_Ayyalasomayajula_Resume.pdf'
 
-const Contact = () => {
-  const formRef = useRef();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+const FLOATING = [
+  { label: 'email',       left: '4%',  top: '22%', delay: 0.3 },
+  { label: 'connect',     left: '82%', top: '15%', delay: 0.6 },
+  { label: 'collaborate', left: '78%', top: '75%', delay: 0.4 },
+  { label: 'hire',        left: '6%',  top: '78%', delay: 0.8 },
+  { label: 'build',       left: '88%', top: '45%', delay: 0.2 },
+]
 
-  const [loading, setLoading] = useState(false);
+const fieldVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+}
 
-  const handleChange = (e) => {
-    const { target } = e;
-    const { name, value } = target;
+const fieldItem = {
+  hidden: { opacity: 0, x: 60 },
+  show:   { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+}
 
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
+const btnItem = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show:   { opacity: 1, scale: [0.9, 1.05, 1], transition: { duration: 0.5, ease: 'easeOut' } },
+}
+
+export default function Contact() {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-100px' })
+
+  const [form,   setForm]   = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState('idle') // 'idle' | 'sending' | 'sent' | 'error'
+
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+    e.preventDefault()
+    if (!form.name || !form.email || !form.message) return
+    setStatus('sending')
     emailjs
       .send(
-        "service_1h0nnpb",
-        "template_5rvdlb3",
-        {
-          from_name: form.name,
-          to_name: "Nishanth Ayyalasomayajula",
-          from_email: form.email,
-          to_email: "nishanthayyalasomayajula@gmail.com",
-          message: form.message,
-        },
-        "8Ld-jPPDdMRPIwJRZ"
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        { from_name: form.name, reply_to: form.email, message: form.message },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
-      .then(
-        () => {
-          setLoading(false);
-          alert("Thank you. I will get back to you as soon as possible.");
-
-          setForm({
-            name: "",
-            email: "",
-            message: "",
-          });
-        },
-        (error) => {
-          setLoading(false);
-          console.error(error);
-
-          alert("Ahh, something went wrong. Please try again.");
-        }
-      );
-  };
+      .then(() => setStatus('sent'))
+      .catch(() => setStatus('error'))
+  }
 
   return (
-    <section id="contact" className="section-padding relative">
-      <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="section-subtitle">Get in touch</p>
-          <h2 className="section-title mt-4 mb-16">Contact</h2>
-        </motion.div>
+    <section
+      id="contact"
+      className={styles.section}
+      ref={ref}
+      style={{ position: 'relative', overflow: 'hidden' }}
+    >
+      <FloatingTags tags={FLOATING} />
 
-        <motion.div
-          className="max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <div className="glass-card">
-            <form
-              ref={formRef}
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-6"
-            >
-              <label className="flex flex-col">
-                <span className="text-white font-medium mb-3 text-sm uppercase tracking-wider">
-                  Your Name
-                </span>
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="What's your name?"
-                  className="bg-[var(--glass-bg)] backdrop-blur-md py-4 px-6 placeholder:text-[var(--text-secondary)] text-white border border-[var(--glass-border)] rounded-xl outline-none focus:border-white/30 transition-all duration-300"
-                />
-              </label>
-              <label className="flex flex-col">
-                <span className="text-white font-medium mb-3 text-sm uppercase tracking-wider">
-                  Your Email
-                </span>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="What's your email address?"
-                  className="bg-[var(--glass-bg)] backdrop-blur-md py-4 px-6 placeholder:text-[var(--text-secondary)] text-white border border-[var(--glass-border)] rounded-xl outline-none focus:border-white/30 transition-all duration-300"
-                />
-              </label>
-              <label className="flex flex-col">
-                <span className="text-white font-medium mb-3 text-sm uppercase tracking-wider">
-                  Your Message
-                </span>
-                <textarea
-                  rows={7}
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="What would you like to say?"
-                  className="bg-[var(--glass-bg)] backdrop-blur-md py-4 px-6 placeholder:text-[var(--text-secondary)] text-white border border-[var(--glass-border)] rounded-xl outline-none resize-none focus:border-white/30 transition-all duration-300"
-                />
-              </label>
+      <div className={styles.container}>
+        <SectionLabel index={5} label="Contact" />
+        <h2 className={styles.heading}>Let's Build Together</h2>
 
-              <button
-                type="submit"
-                className="btn-primary w-full"
-              >
-                {loading ? "Sending..." : "Send Message"}
-              </button>
-            </form>
+        {/* Terminal window */}
+        <div className={styles.terminal}>
+          <div className={styles.chrome}>
+            <span className={styles.dot} style={{ background: '#FF5F57' }} />
+            <span className={styles.dot} style={{ background: '#FFBD2E' }} />
+            <span className={styles.dot} style={{ background: '#28CA41' }} />
+            <span className={styles.chromeLabel}>terminal — contact</span>
           </div>
-        </motion.div>
+
+          <div className={styles.body}>
+            {status === 'sent' ? (
+              <div className={styles.statusMsg}>
+                <span className={styles.statusOk}>{'> mail sent. 200 OK ✓'}</span>
+              </div>
+            ) : status === 'error' ? (
+              <div className={styles.statusMsg}>
+                <span className={styles.statusErr}>{'> error: failed to send. try again'}</span>
+                <button className={styles.retryBtn} onClick={() => setStatus('idle')}>
+                  {'$ retry'}
+                </button>
+              </div>
+            ) : (
+              <motion.form
+                className={styles.form}
+                onSubmit={handleSubmit}
+                variants={fieldVariants}
+                initial="hidden"
+                animate={inView ? 'show' : 'hidden'}
+              >
+                <motion.div className={styles.fieldRow} variants={fieldItem}>
+                  <label className={styles.fieldLabel} htmlFor="cf-name">$ name:</label>
+                  <input
+                    id="cf-name"
+                    name="name"
+                    className={styles.fieldInput}
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="your name"
+                    autoComplete="name"
+                    required
+                  />
+                </motion.div>
+
+                <motion.div className={styles.fieldRow} variants={fieldItem}>
+                  <label className={styles.fieldLabel} htmlFor="cf-email">$ email:</label>
+                  <input
+                    id="cf-email"
+                    name="email"
+                    type="email"
+                    className={styles.fieldInput}
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    required
+                  />
+                </motion.div>
+
+                <motion.div className={styles.fieldRow} variants={fieldItem}>
+                  <label className={styles.fieldLabel} htmlFor="cf-message">$ message:</label>
+                  <input
+                    id="cf-message"
+                    name="message"
+                    className={styles.fieldInput}
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="let's build something..."
+                    required
+                  />
+                </motion.div>
+
+                <motion.div className={styles.fieldRow} variants={btnItem}>
+                  <button
+                    type="submit"
+                    className={styles.submitBtn}
+                    disabled={status === 'sending'}
+                  >
+                    {status === 'sending' ? '> sending...' : '> send --now'}
+                  </button>
+                </motion.div>
+              </motion.form>
+            )}
+
+            <div className={styles.ctaGroup}>
+              <a
+                href="https://www.linkedin.com/in/a-nishanth"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaLink}
+              >
+                LinkedIn ↗
+              </a>
+              <a
+                href="https://github.com/nishanth1104"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaLink}
+              >
+                GitHub ↗
+              </a>
+              <a href={resumePdf} download className={styles.ctaLinkSecondary}>
+                Download Resume ↓
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-  );
-};
-
-export default Contact;
+  )
+}
